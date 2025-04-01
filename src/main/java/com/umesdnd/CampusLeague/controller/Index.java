@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class Index {
 
-    @GetMapping("/")
+    @GetMapping("/campus_league")
     public String index(){
         return "Bienvenido al index de Campus League";
     }

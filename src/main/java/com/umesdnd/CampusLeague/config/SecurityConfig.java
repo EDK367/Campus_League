@@ -1,15 +1,17 @@
 package com.umesdnd.CampusLeague.config;
 
+import com.umesdnd.CampusLeague.service.Token.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -17,25 +19,27 @@ import org.springframework.security.web.SecurityFilterChain;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    /*
-    Esta clase servi para la configuracion de rutas
-    */
-    // objetos de configuracion
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final AuthenticationProvider authProvider;
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .csrf(csrf -> csrf.disable())
-                .authorizeHttpRequests(auth -> auth.requestMatchers("/campus_league/**").permitAll()
-                        .requestMatchers("/api/v1/home").authenticated()
-                        .requestMatchers("/api/v1/admin").hasAuthority("ADMIN")
-                            .anyRequest().authenticated())
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/auth/**").permitAll()
+                        .requestMatchers("/campus_league").permitAll()
+                        .requestMatchers("/campus_league/**").permitAll()
+                        .requestMatchers("/api/v2/**").authenticated()
+                        .requestMatchers("/api/v1/**").hasAuthority("ADMIN")
+                        .anyRequest().authenticated())
+                .sessionManagement(sessionManager ->
+                        sessionManager
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .formLogin(Customizer.withDefaults())
                 .build();
     }
 
-    // el tipo de encriptacion, el tipo a decision por el momento
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+
 }
