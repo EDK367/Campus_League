@@ -7,10 +7,13 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.security.Key;
+import java.time.LocalDateTime;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -35,7 +38,7 @@ public class JwtService {
                 .setClaims(extraClaims)
                 .setSubject(user.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + expirationTime))
+                .setExpiration(getTodayExpiration(18))
                 .signWith(getKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
@@ -74,5 +77,28 @@ public class JwtService {
 
     private boolean isTokenExpired(String token) {
         return getExpiration(token).before(new Date());
+    }
+
+    private Date getTodayExpiration(int hour) {
+        Calendar now = Calendar.getInstance();
+        int currentHour = now.get(Calendar.HOUR_OF_DAY);
+
+        Calendar expirationCalendar = Calendar.getInstance();
+
+        if (currentHour < 8) {
+            expirationCalendar.add(Calendar.HOUR_OF_DAY, 3);
+        } else {
+            expirationCalendar.set(Calendar.HOUR_OF_DAY, hour);
+            expirationCalendar.set(Calendar.MINUTE, 0);
+            expirationCalendar.set(Calendar.SECOND, 0);
+            expirationCalendar.set(Calendar.MILLISECOND, 0);
+
+            if (expirationCalendar.getTime().before(new Date())) {
+                expirationCalendar = Calendar.getInstance();
+                expirationCalendar.add(Calendar.HOUR_OF_DAY, 3);
+            }
+        }
+
+        return expirationCalendar.getTime();
     }
 }

@@ -11,9 +11,6 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1")
 @RequiredArgsConstructor
 public class PrivateController {
-    private final AuthenticationManager authenticationManager;
-    private final JwtService jwtService;
-    private final UserDetailsService userDetailsService;
 
     @GetMapping("/")
     public String denegado() {

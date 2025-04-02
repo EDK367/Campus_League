@@ -28,9 +28,7 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/**").permitAll()
-                        .requestMatchers("/campus_league").permitAll()
                         .requestMatchers("/campus_league/**").permitAll()
-                        .requestMatchers("/api/v2/**").authenticated()
                         .requestMatchers("/api/v1/**").hasAuthority("ADMIN")
                         .anyRequest().authenticated())
                 .sessionManagement(sessionManager ->
@@ -38,7 +36,11 @@ public class SecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .formLogin(Customizer.withDefaults())
-                .build();
+                .exceptionHandling(ex -> ex
+                    .authenticationEntryPoint((request, response, authException) -> {
+                    response.setStatus(401);
+                })
+                ).build();
     }
 
 

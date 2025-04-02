@@ -26,9 +26,9 @@ public class User implements UserDetails {
     private String username;
     private String password;
     private String email;
-    private String createdAt;
+    private String created_at;
     // para tener null
-    private Long createdBy;
+    private Long created_by;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
