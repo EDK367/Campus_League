@@ -10,12 +10,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 @ControllerAdvice
-public class GloblalException401 {
+public class GloblalException404 {
 
     @ExceptionHandler(NoHandlerFoundException.class)
     public ResponseEntity<Map<String, Object>> handleNotFoundError(NoHandlerFoundException ex) {
         Map<String, Object> errorResponse = new HashMap<>();
-        errorResponse.put("status", 401);
+        errorResponse.put("status", 404);
         errorResponse.put("error", "Ruta no encontrada");
         errorResponse.put("message", "La ruta solicitada no existe en el servidor");
         errorResponse.put("path", ex.getRequestURL());

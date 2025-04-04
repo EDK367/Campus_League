@@ -38,7 +38,7 @@ public class SecurityConfig {
                 .formLogin(Customizer.withDefaults())
                 .exceptionHandling(ex -> ex
                     .authenticationEntryPoint((request, response, authException) -> {
-                    response.setStatus(401);
+                    response.setStatus(404);
                 })
                 ).build();
     }

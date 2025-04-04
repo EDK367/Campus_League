@@ -1,10 +1,7 @@
 package com.umesdnd.CampusLeague.controller.Login;
 
-import com.umesdnd.CampusLeague.service.Token.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
