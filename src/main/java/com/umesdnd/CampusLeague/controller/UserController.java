@@ -21,24 +21,24 @@ public class UserController {
     }
 
     @PostMapping("/save")
-    public ResponseEntity<String> saveUser(@RequestBody User user){
+    public ResponseEntity<User> saveUser(@RequestBody User user){
         try {
-            //System.out.println(user);
-            userService.saveUser(user);
-            return (ResponseEntity<String>) ResponseEntity.status(HttpStatus.CREATED).body("Usuario guardado con exito");
+            User savedUser = userService.saveUser(user);
+            System.out.println(savedUser);
+            return ResponseEntity.status(HttpStatus.CREATED).body(savedUser);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al guardar el usuario");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
-    @PutMapping("/update")
-    public ResponseEntity<String> updateUser(@RequestBody User user){
+    @PutMapping("/update/{idUser}")
+    public ResponseEntity<User> updateUser(@PathVariable Long idUser, @RequestBody User user){
         try {
             //System.out.println(user);
-            userService.updateUser(user);
-            return ResponseEntity.status(HttpStatus.OK).body("Usuario actualizado con exito");
+            User userUpdateNew = userService.updateUser(idUser, user);
+            return ResponseEntity.status(HttpStatus.OK).body(userUpdateNew);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al actualizar el usuario");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 

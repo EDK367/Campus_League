@@ -7,9 +7,9 @@ public interface UserInterfaceService {
 
     public User getUserId(Long idUser);
 
-    public void saveUser(User user);
+    public User saveUser(User user);
 
-    public void updateUser(User user);
+    public User updateUser(Long idUser, User user);
 
     public void deleteUser(Long idUser);
 

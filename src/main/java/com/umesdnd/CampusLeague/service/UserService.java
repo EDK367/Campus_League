@@ -2,6 +2,7 @@ package com.umesdnd.CampusLeague.service;
 
 import com.umesdnd.CampusLeague.model.Status;
 import com.umesdnd.CampusLeague.model.User;
+import com.umesdnd.CampusLeague.repository.StatusRepository;
 import com.umesdnd.CampusLeague.repository.UserRepository;
 import com.umesdnd.CampusLeague.service.interfaces.UserInterfaceService;
 import com.umesdnd.CampusLeague.utills.BCryptPass;
@@ -16,6 +17,9 @@ public class UserService implements UserInterfaceService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private StatusRepository statusRepository;
+
     private DecipherPassword decipherPassword = new DecipherPassword();
     private BCryptPass bCryptPass = new BCryptPass();
 
@@ -26,22 +30,26 @@ public class UserService implements UserInterfaceService {
     }
 
     @Override
-    public void saveUser(User user) {
+    public User saveUser(User user) {
         String pass = user.getPassword();
         pass = decipherPassword.getDecipherPasswordUser(pass);
         pass = bCryptPass.getBCriptPasswordUser(pass);
         user.setPassword(pass);
+        Status fullStatus = statusRepository.findById(user.getStatus().getId())
+                .orElseThrow(() -> new RuntimeException("Status no encontrado"));
+        user.setStatus(fullStatus);
         //System.out.println(user);
-        this.userRepository.save(user);
+        return this.userRepository.save(user);
     }
 
     @Override
-    public void updateUser(User user) {
-        String pass = user.getPassword();
-        pass = decipherPassword.getDecipherPasswordUser(pass);
-        pass = bCryptPass.getBCriptPasswordUser(pass);
-        user.setPassword(pass);
-        this.userRepository.save(user);
+    public User updateUser(Long idUser, User user) {
+        user.setId(idUser);
+        User newPass = this.userRepository.findById(idUser).orElse(null);
+        if(!newPass.getPassword().equals(user.getPassword())) {
+            user.setPassword(newPass.getPassword());
+        }
+        return this.userRepository.save(user);
     }
 
     @Override
