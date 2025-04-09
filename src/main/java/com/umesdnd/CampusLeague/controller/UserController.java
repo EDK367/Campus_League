@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/v1/user")
+@RequestMapping("/admin/api/user")
 public class UserController {
 
     @Autowired
@@ -20,7 +20,7 @@ public class UserController {
         return this.userService.getUserId(idUser);
     }
 
-    @PostMapping("/save")
+    @PostMapping("")
     public ResponseEntity<User> saveUser(@RequestBody User user){
         try {
             User savedUser = userService.saveUser(user);
@@ -31,7 +31,7 @@ public class UserController {
         }
     }
 
-    @PutMapping("/update/{idUser}")
+    @PutMapping("/{idUser}")
     public ResponseEntity<User> updateUser(@PathVariable Long idUser, @RequestBody User user){
         try {
             //System.out.println(user);
@@ -42,7 +42,7 @@ public class UserController {
         }
     }
 
-    @DeleteMapping("/delete/{idUser}")
+    @DeleteMapping("/{idUser}")
     public ResponseEntity<String> deleteUser(@PathVariable Long idUser){
         try {
             userService.deleteUser(idUser);

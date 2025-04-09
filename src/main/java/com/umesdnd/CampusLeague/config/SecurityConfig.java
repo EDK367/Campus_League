@@ -28,9 +28,8 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/**").permitAll()
-                        .requestMatchers("/campus_league/**").permitAll()
-                        .requestMatchers("/api/v1/**").hasAuthority("ADMIN")
-                        .anyRequest().authenticated())
+                        .requestMatchers("/campus_league/api/**").permitAll()
+                        .requestMatchers("/admin/**").authenticated())
                 .sessionManagement(sessionManager ->
                         sessionManager
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))

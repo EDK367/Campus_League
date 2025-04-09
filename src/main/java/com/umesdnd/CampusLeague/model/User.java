@@ -47,7 +47,7 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singletonList(new SimpleGrantedAuthority("ADMIN"));
+        return Collections.emptyList();
     }
     @Override
     public boolean isAccountNonExpired() {
@@ -63,7 +63,7 @@ public class User implements UserDetails {
     }
     @Override
     public boolean isEnabled() {
-        if (this.status.getStatus_name().equals("Active")) {
+        if (this.status.getStatus_name().equalsIgnoreCase("Active")) {
             return true;
         }
         return false;
