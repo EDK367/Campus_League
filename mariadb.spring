@@ -1,0 +1,13 @@
+
+
+spring.datasource.driver-class-name=org.mariadb.jdbc.Driver
+hibernate.dialect=org.hibernate.dialect.MariaDB106Dialect
+
+DB_PASSWORD=dnn;DB_URL=jdbc:mariadb://localhost:3306/campus;DB_USER=dnn;PORT=8080;KEY=Ajfluoi74BKlbO987NKJBlkjazx963adf32118GDad0sdf1aKJHPOdfa1adf79adf3afDYTqwerVzmnvhDVvhuioQeVJHXZcbphaif347jkhdfi6olih13409aJHIPfa3409haod74lohf
+
+
+        <dependency>
+            <groupId>org.mariadb.jdbc</groupId>
+            <artifactId>mariadb-java-client</artifactId>
+            <version>3.4.1</version>
+        </dependency>
