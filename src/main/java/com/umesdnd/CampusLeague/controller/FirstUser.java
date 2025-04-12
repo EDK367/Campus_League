@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/campus_league/api")
+@RequestMapping("")
 public class FirstUser {
 
     @Autowired
