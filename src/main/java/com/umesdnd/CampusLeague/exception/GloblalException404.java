@@ -20,6 +20,6 @@ public class GloblalException404 {
         errorResponse.put("message", "La ruta solicitada no existe en el servidor");
         errorResponse.put("path", ex.getRequestURL());
 
-        return new ResponseEntity<>(errorResponse, HttpStatus.PAYMENT_REQUIRED);
+        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
     }
 }
