@@ -33,7 +33,7 @@ public class SecurityConfig {
                 .cors(withDefaults())
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        //para login, para registro de equipos y sus jugadores, para lectura de torneos. Las rutas estan libres
+                        // para login, para registro de equipos y sus jugadores, para lectura de torneos. Las rutas estan libres
                         .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/equipo").permitAll()
                         .requestMatchers(HttpMethod.PUT, "/equipo").permitAll()
@@ -42,7 +42,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/torneo").permitAll()
 
                         // para documentacion con sweager & sweagger-ui
-                        //documentacion: http://localhost:8080/campus-league/api/swagger-ui/index.html
+                        // documentacion: http://localhost:8080/campus-league/api/swagger-ui/index.html
                         .requestMatchers(
                                 "/v1/api/**",
                                 "/v2/api-docs",
@@ -57,7 +57,7 @@ public class SecurityConfig {
                                 "/swagger-ui.html"
                         ).permitAll()
 
-                        //todas las demas rutas y operaciones estan protegidas por default
+                        // todas las demas rutas y operaciones estan protegidas por default
                         .requestMatchers(HttpMethod.POST, "/**").authenticated()
                         .requestMatchers(HttpMethod.GET, "/**").authenticated()
                         .requestMatchers(HttpMethod.PUT, "/**").authenticated()
