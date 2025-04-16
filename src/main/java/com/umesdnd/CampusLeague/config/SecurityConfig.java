@@ -72,7 +72,7 @@ public class SecurityConfig {
                         if (authException.getMessage().equalsIgnoreCase("Bad credentials")){
                             response.setStatus(400);
                         } else {
-                            response.setStatus(404);
+                            response.setStatus(401);
                         }
                 }))
                 .build();

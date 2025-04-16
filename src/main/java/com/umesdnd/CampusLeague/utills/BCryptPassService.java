@@ -1,8 +1,10 @@
 package com.umesdnd.CampusLeague.utills;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
 
-public class BCryptPass {
+@Service
+public class BCryptPassService {
 
     private String bcriptPasswordUser(String password){
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();

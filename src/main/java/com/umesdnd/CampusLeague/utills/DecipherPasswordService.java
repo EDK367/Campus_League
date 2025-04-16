@@ -1,7 +1,9 @@
 package com.umesdnd.CampusLeague.utills;
 
+import org.springframework.stereotype.Service;
 
-public class DecipherPassword {
+@Service
+public class DecipherPasswordService {
 
     private String decipherPasswordUser(String password){
 
