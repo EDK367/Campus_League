@@ -5,7 +5,7 @@ public class HashPass {
     public static void main(String[] args) {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
-        String plainPassword = "abc";
+        String plainPassword = "1234";
 
         String hashedPassword = encoder.encode(plainPassword);
 

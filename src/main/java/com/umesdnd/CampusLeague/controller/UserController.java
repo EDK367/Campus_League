@@ -24,7 +24,7 @@ public class UserController {
     public ResponseEntity<User> saveUser(@RequestBody User user){
         try {
             User savedUser = userService.saveUser(user);
-            System.out.println(savedUser);
+            //System.out.println(savedUser);
             return ResponseEntity.status(HttpStatus.CREATED).body(savedUser);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();

@@ -1,6 +1,8 @@
 package com.umesdnd.CampusLeague.service;
 
 import com.umesdnd.CampusLeague.model.Coach;
+import com.umesdnd.CampusLeague.model.Player;
+import com.umesdnd.CampusLeague.model.Status;
 import com.umesdnd.CampusLeague.model.Team;
 import com.umesdnd.CampusLeague.repository.TeamRepository;
 import com.umesdnd.CampusLeague.service.interfaces.TeamServiceInterface;
@@ -13,14 +15,17 @@ import java.util.List;
 public class TeamService implements TeamServiceInterface {
 
     @Autowired
-    private TeamRepository repository;
+    private TeamRepository teamRepository;
 
     @Autowired
     private CoachService coachService;
 
+    @Autowired
+    private StatusService statusService;
+
     @Override
     public Team getById(Long id) {
-        return repository.findById(id).orElseThrow(() -> new RuntimeException("Team not found with id " + id));
+        return teamRepository.findById(id).orElseThrow(() -> new RuntimeException("Team not found with id " + id));
     }
 
     @Override
@@ -28,30 +33,35 @@ public class TeamService implements TeamServiceInterface {
         Coach coach = coachService.saveOne(team.getCoach());
         team.setCoach(coach);
 
-        return repository.save(team);
+        if (team.getPlayers() != null) {
+            for (Player player : team.getPlayers()) {
+                player.setTeam(team);
+            }
+        }
+        return teamRepository.save(team);
     }
 
     @Override
     public Team update(Long id, Team team) {
-        Team existingTeam = repository.findById(id).orElseThrow(() -> new RuntimeException("Team not found with id " + id));
+        Team existingTeam = teamRepository.findById(id).orElseThrow(() -> new RuntimeException("Team not found with id " + id));
 
         existingTeam.setName(team.getName());
         existingTeam.setStatus(team.getStatus());
         existingTeam.setCoach(team.getCoach());
         existingTeam.setUser(team.getUser());
 
-        return repository.save(existingTeam);
+        return teamRepository.save(existingTeam);
     }
 
     @Override
     public void delete(Long id) {
-        Team team = repository.findById(id).orElseThrow(() -> new RuntimeException("Team not found with id " + id));
+        Team team = teamRepository.findById(id).orElseThrow(() -> new RuntimeException("Team not found with id " + id));
 
-        repository.delete(team);
+        teamRepository.delete(team);
     }
 
     @Override
     public List<Team> getAll() {
-        return repository.findAll();
+        return teamRepository.findAll();
     }
 }

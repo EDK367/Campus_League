@@ -53,7 +53,7 @@ public class PlayerPositionController {
             playerPositionService.delete(idPosition);
             return ResponseEntity.ok("Posicion eliminada con éxito");
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al eliminar el jugador");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al eliminar la posicion");
         }
     }
 

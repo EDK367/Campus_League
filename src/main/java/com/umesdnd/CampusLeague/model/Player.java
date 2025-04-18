@@ -16,6 +16,7 @@ import java.time.LocalDateTime;
 @Data
 @Builder
 public class Player {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -44,4 +45,5 @@ public class Player {
     @CreationTimestamp
     @Column(name = "created_at", columnDefinition = "DATETIME(6) DEFAULT CURRENT_TIMESTAMP(6)", nullable = true, updatable = false)
     private LocalDateTime created_at;
+
 }

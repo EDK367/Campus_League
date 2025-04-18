@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "teams")
@@ -33,7 +34,7 @@ public class Team {
     private LocalDateTime approved_date;
 
     @ManyToOne
-    @JoinColumn(name = "approved_by", nullable = false)
+    @JoinColumn(name = "approved_by", nullable = true, updatable = false)
     private User user;
 
     @ManyToOne
@@ -43,5 +44,9 @@ public class Team {
     @ManyToOne
     @JoinColumn(name = "coach_id")
     private Coach coach;
+
+    @OneToMany(mappedBy = "team", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Player> players;
+
 
 }
