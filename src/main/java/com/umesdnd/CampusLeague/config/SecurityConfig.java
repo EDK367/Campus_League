@@ -35,6 +35,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         // para login, para registro de equipos y sus jugadores, para lectura de torneos. Las rutas estan libres
                         .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/team").permitAll()
                         .requestMatchers(HttpMethod.POST, "/equipo").permitAll()
                         .requestMatchers(HttpMethod.PUT, "/equipo").permitAll()
                         .requestMatchers(HttpMethod.POST, "/jugador").permitAll()

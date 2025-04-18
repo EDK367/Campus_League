@@ -1,5 +1,6 @@
 package com.umesdnd.CampusLeague.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -46,6 +47,7 @@ public class Team {
     private Coach coach;
 
     @OneToMany(mappedBy = "team", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<Player> players;
 
 

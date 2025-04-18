@@ -34,12 +34,8 @@ public class TeamController {
 
     @PostMapping
     public ResponseEntity<Team> saveTeam(@RequestBody Team team) {
-        try {
             Team savedTeam = teamService.saveOne(team);
             return new ResponseEntity<>(savedTeam, HttpStatus.CREATED);
-        } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
-        }
     }
 
     @PutMapping("/{id}")

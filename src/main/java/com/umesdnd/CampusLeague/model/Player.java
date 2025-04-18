@@ -1,5 +1,7 @@
 package com.umesdnd.CampusLeague.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -27,7 +29,7 @@ public class Player {
     @Column(name = "age", nullable = false)
     private int age;
 
-    @Column(name = "carnet", nullable = false, unique = true)
+    @Column(name = "carnet", nullable = false, unique = false)
     private String carnet;
 
     @ManyToOne
@@ -36,6 +38,7 @@ public class Player {
 
     @ManyToOne
     @JoinColumn(name = "team_id", nullable = false)
+    @JsonBackReference
     private Team team;
 
     @ManyToOne

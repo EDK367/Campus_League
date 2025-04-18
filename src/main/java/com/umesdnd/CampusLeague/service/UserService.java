@@ -1,5 +1,6 @@
 package com.umesdnd.CampusLeague.service;
 
+import com.umesdnd.CampusLeague.exception.BadRequestException;
 import com.umesdnd.CampusLeague.model.Status;
 import com.umesdnd.CampusLeague.model.User;
 import com.umesdnd.CampusLeague.repository.UserRepository;
@@ -32,6 +33,34 @@ public class UserService implements UserInterfaceService {
 
     @Override
     public User saveUser(User user) {
+        if (user == null) {
+            throw new BadRequestException("No se recivio ningun usuario");
+        }
+
+        if (user.getUsername() == null || user.getUsername().trim().isEmpty()) {
+            throw new BadRequestException("El nombre de usuario no puede estar vacío");
+        }
+
+        if (user.getPassword() == null || user.getPassword().trim().isEmpty()) {
+            throw new BadRequestException("La contraseña no puede estar vacía");
+        }
+
+        if (user.getEmail() == null || user.getEmail().trim().isEmpty()) {
+            throw new BadRequestException("El correo electrónico no puede estar vacío");
+        }
+
+        if (user.getStatus() == null) {
+            user.setStatus(statusService.getById(1L));
+        }
+        if (this.userRepository.findByUsername(user.getUsername()).isPresent()) {
+            throw new BadRequestException("El username del usuario ya existe");
+        }
+
+        if (this.userRepository.findByEmail(user.getEmail()).isPresent()) {
+            throw new BadRequestException("El email del usuario ya existe");
+        }
+
+
         String pass = user.getPassword();
         pass = decipherPasswordService.getDecipherPasswordUser(pass);
         pass = bCryptPassService.getBCriptPasswordUser(pass);
