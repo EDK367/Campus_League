@@ -25,7 +25,7 @@ public class Tournament {
 
     @ManyToOne
     @JoinColumn(name = "sport_id", nullable = false)
-    private Sport sports;
+    private Sport sport;
 
     @Temporal(TemporalType.DATE)
     @Column(name = "start_date", nullable = false)
