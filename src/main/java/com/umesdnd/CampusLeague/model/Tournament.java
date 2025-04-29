@@ -21,7 +21,7 @@ public class Tournament {
     private Long id;
 
     @Column(name = "name", nullable = false)
-    private String name;
+    private String tournament_name;
 
     @ManyToOne
     @JoinColumn(name = "sport_id", nullable = false)

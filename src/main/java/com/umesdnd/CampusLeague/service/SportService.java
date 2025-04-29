@@ -34,7 +34,7 @@ public class SportService implements SportServiceInterface {
     @Override
     public void delete(Long id) {
         if (!sportRepository.existsById(id)){
-            throw new RuntimeException("Sport with ID " + id + "not found");
+            throw new RuntimeException("Sport with ID " + id + " not found");
         }
         sportRepository.deleteById(id);
     }
