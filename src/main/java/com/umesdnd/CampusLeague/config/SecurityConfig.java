@@ -40,8 +40,8 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.PUT, "/equipo").permitAll()
                         .requestMatchers(HttpMethod.POST, "/jugador").permitAll()
                         .requestMatchers(HttpMethod.PUT, "/jugador").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/torneo").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/player-position").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/torneo/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/player-position/**").permitAll()
                         // para documentacion con sweager & sweagger-ui
                         // documentacion: http://localhost:8080/campus-league/api/swagger-ui/index.html
                         .requestMatchers(
