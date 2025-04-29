@@ -12,38 +12,38 @@ import java.util.List;
 public class CoachService implements CoachServiceInterface {
 
     @Autowired
-    private CoachRepository repository;
+    private CoachRepository coachRepository;
 
     @Override
     public Coach getById(Long id) {
-        return repository.findById(id).orElseThrow(() -> new RuntimeException("Coach not found"));
+        return coachRepository.findById(id).orElseThrow(() -> new RuntimeException("Coach not found"));
     }
 
     @Override
     public Coach saveOne(Coach coach) {
-        return repository.save(coach);
+        return coachRepository.save(coach);
     }
 
     @Override
     public Coach update(Long id, Coach coach) {
-        Coach existingCoach = repository.findById(id).orElseThrow(() -> new RuntimeException("Coach not found"));
+        Coach existingCoach = coachRepository.findById(id).orElseThrow(() -> new RuntimeException("Coach not found"));
 
         existingCoach.setName(coach.getName());
         existingCoach.setExperience_years(coach.getExperience_years());
 
-        return repository.save(existingCoach);
+        return coachRepository.save(existingCoach);
     }
 
     @Override
     public void delete(Long id) {
-        if (!repository.existsById(id)){
+        if (!coachRepository.existsById(id)){
             throw new RuntimeException("Coach with ID " + id + " not found");
         }
-        repository.deleteById(id);
+        coachRepository.deleteById(id);
     }
 
     @Override
     public List<Coach> getAll() {
-        return repository.findAll();
+        return coachRepository.findAll();
     }
 }
