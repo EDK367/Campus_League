@@ -10,15 +10,15 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("player")
+@RequestMapping("jugador")
 public class PlayerController {
     @Autowired
     private PlayerService playerService;
 
-    @GetMapping("/{idPlayer}")
-    public ResponseEntity<Player> getPlayerById(@PathVariable Long idPlayer) {
+    @GetMapping("/{id}")
+    public ResponseEntity<Player> getPlayerById(@PathVariable Long id) {
         try {
-            Player player = playerService.getById(idPlayer);
+            Player player = playerService.getById(id);
             return ResponseEntity.ok(player);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
@@ -35,20 +35,20 @@ public class PlayerController {
         }
     }
 
-    @PutMapping("/{idPlayer}")
-    public ResponseEntity<Player> updatePlayer(@PathVariable Long idPlayer, @RequestBody Player player) {
+    @PutMapping("/{id}")
+    public ResponseEntity<Player> updatePlayer(@PathVariable Long id, @RequestBody Player player) {
         try {
-            Player updatedPlayer = playerService.update(idPlayer, player);
+            Player updatedPlayer = playerService.update(id, player);
             return ResponseEntity.ok(updatedPlayer);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
-    @DeleteMapping("/{idPlayer}")
-    public ResponseEntity<String> deletePlayer(@PathVariable Long idPlayer) {
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deletePlayer(@PathVariable Long id) {
         try {
-            playerService.delete(idPlayer);
+            playerService.delete(id);
             return ResponseEntity.ok("Jugador eliminado con éxito");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al eliminar el jugador");
@@ -65,10 +65,10 @@ public class PlayerController {
         }
     }
 
-    @GetMapping("team/{teamId}")
-    public ResponseEntity<List<Player>> getAllPlayersByTeam(@PathVariable Long teamId) {
+    @GetMapping("equipo/{equipoId}")
+    public ResponseEntity<List<Player>> getAllPlayersByTeam(@PathVariable Long equipoId) {
         try {
-            List<Player> players = playerService.findByTeamId(teamId);
+            List<Player> players = playerService.findByTeamId(equipoId);
             return ResponseEntity.ok(players);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();

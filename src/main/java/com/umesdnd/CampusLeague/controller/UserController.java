@@ -8,16 +8,16 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/usuario")
 public class UserController {
 
     @Autowired
     private UserService userService;
 
-    @GetMapping("/{idUser}")
-    public User getUserById(@PathVariable Long idUser){
-        //System.out.println(idUser);
-        return this.userService.getUserId(idUser);
+    @GetMapping("/{id}")
+    public User getUserById(@PathVariable Long id){
+        //System.out.println(id);
+        return this.userService.getUserId(id);
     }
 
     @PostMapping("")
@@ -26,21 +26,21 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.CREATED).body(savedUser);
     }
 
-    @PutMapping("/{idUser}")
-    public ResponseEntity<User> updateUser(@PathVariable Long idUser, @RequestBody User user){
+    @PutMapping("/{id}")
+    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User user){
         try {
             //System.out.println(user);
-            User userUpdateNew = userService.updateUser(idUser, user);
+            User userUpdateNew = userService.updateUser(id, user);
             return ResponseEntity.status(HttpStatus.OK).body(userUpdateNew);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
-    @DeleteMapping("/{idUser}")
-    public ResponseEntity<String> deleteUser(@PathVariable Long idUser){
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteUser(@PathVariable Long id){
         try {
-            userService.deleteUser(idUser);
+            userService.deleteUser(id);
             return ResponseEntity.status(HttpStatus.OK).body("Usuario eliminado con exito");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al eliminar el usuario");

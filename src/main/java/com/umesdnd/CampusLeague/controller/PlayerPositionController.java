@@ -11,16 +11,16 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("player-position")
+@RequestMapping("posicion-jugador")
 public class PlayerPositionController {
 
     @Autowired
     private PlayerPositionService playerPositionService;
 
-    @GetMapping("/{idPosition}")
-    public ResponseEntity<PlayerPosition> getPlayerPositionById(@PathVariable Long idPosition) {
+    @GetMapping("/{id}")
+    public ResponseEntity<PlayerPosition> getPlayerPositionById(@PathVariable Long id) {
         try {
-            PlayerPosition position = playerPositionService.getById(idPosition);
+            PlayerPosition position = playerPositionService.getById(id);
             return ResponseEntity.ok(position);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
@@ -37,20 +37,20 @@ public class PlayerPositionController {
         }
     }
 
-    @PutMapping("/{idPosition}")
-    public ResponseEntity<PlayerPosition> updatePlayer(@PathVariable Long idPosition, @RequestBody PlayerPosition playerPosition) {
+    @PutMapping("/{id}")
+    public ResponseEntity<PlayerPosition> updatePlayer(@PathVariable Long id, @RequestBody PlayerPosition playerPosition) {
         try {
-            PlayerPosition updatedPosition = playerPositionService.update(idPosition, playerPosition);
+            PlayerPosition updatedPosition = playerPositionService.update(id, playerPosition);
             return ResponseEntity.ok(updatedPosition);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
-    @DeleteMapping("/{idPosition}")
-    public ResponseEntity<String> deletePlayer(@PathVariable Long idPosition) {
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deletePlayer(@PathVariable Long id) {
         try {
-            playerPositionService.delete(idPosition);
+            playerPositionService.delete(id);
             return ResponseEntity.ok("Posicion eliminada con éxito");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al eliminar la posicion");
