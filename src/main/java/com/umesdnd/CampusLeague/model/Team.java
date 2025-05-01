@@ -43,7 +43,7 @@ public class Team {
     private Status status;
 
     @ManyToOne
-    @JoinColumn(name = "coach_id")
+    @JoinColumn(name = "coach_id", nullable = true)
     private Coach coach;
 
     @OneToMany(mappedBy = "team", cascade = CascadeType.ALL, orphanRemoval = true)

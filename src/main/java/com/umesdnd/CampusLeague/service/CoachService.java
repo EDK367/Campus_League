@@ -1,5 +1,6 @@
 package com.umesdnd.CampusLeague.service;
 
+import com.umesdnd.CampusLeague.exception.BadRequestException;
 import com.umesdnd.CampusLeague.model.Coach;
 import com.umesdnd.CampusLeague.repository.CoachRepository;
 import com.umesdnd.CampusLeague.service.interfaces.CoachServiceInterface;
@@ -16,7 +17,7 @@ public class CoachService implements CoachServiceInterface {
 
     @Override
     public Coach getById(Long id) {
-        return coachRepository.findById(id).orElseThrow(() -> new RuntimeException("Coach not found"));
+        return coachRepository.findById(id).orElseThrow(() -> new BadRequestException("Coach not found"));
     }
 
     @Override
@@ -26,7 +27,7 @@ public class CoachService implements CoachServiceInterface {
 
     @Override
     public Coach update(Long id, Coach coach) {
-        Coach existingCoach = coachRepository.findById(id).orElseThrow(() -> new RuntimeException("Coach not found"));
+        Coach existingCoach = coachRepository.findById(id).orElseThrow(() -> new BadRequestException("Coach not found"));
 
         existingCoach.setName(coach.getName());
         existingCoach.setExperience_years(coach.getExperience_years());
