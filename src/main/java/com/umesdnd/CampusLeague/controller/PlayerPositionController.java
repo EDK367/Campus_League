@@ -17,6 +17,17 @@ public class PlayerPositionController {
     @Autowired
     private PlayerPositionService playerPositionService;
 
+
+    @GetMapping("")
+    public ResponseEntity<List<PlayerPosition>> getAllPlayerPositions() {
+        try {
+            List<PlayerPosition> positions = playerPositionService.getAll();
+            return ResponseEntity.ok(positions);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<PlayerPosition> getPlayerPositionById(@PathVariable Long id) {
         try {
@@ -57,13 +68,4 @@ public class PlayerPositionController {
         }
     }
 
-    @GetMapping("")
-    public ResponseEntity<List<PlayerPosition>> getAllPlayerPositions() {
-        try {
-            List<PlayerPosition> positions = playerPositionService.getAll();
-            return ResponseEntity.ok(positions);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
-    }
 }

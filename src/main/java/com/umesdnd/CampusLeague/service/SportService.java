@@ -1,5 +1,7 @@
 package com.umesdnd.CampusLeague.service;
 
+import com.umesdnd.CampusLeague.exception.BadRequestException;
+import com.umesdnd.CampusLeague.exception.GlobalExceptionHandler;
 import com.umesdnd.CampusLeague.model.Sport;
 import com.umesdnd.CampusLeague.repository.SportRepository;
 import com.umesdnd.CampusLeague.service.interfaces.SportServiceInterface;
@@ -16,7 +18,7 @@ public class SportService implements SportServiceInterface {
 
     @Override
     public Sport getById(Long id) {
-        return sportRepository.findById(id).orElseThrow(() -> new RuntimeException("Sport not found"));
+        return sportRepository.findById(id).orElseThrow(() -> new BadRequestException("Sport not found"));
     }
 
     @Override
@@ -40,5 +42,8 @@ public class SportService implements SportServiceInterface {
     }
 
     @Override
-    public List<Sport> getAll() { return sportRepository.findAll();}
+    public List<Sport> getAll() {
+        return sportRepository.findAll();
+    }
+
 }

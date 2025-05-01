@@ -21,6 +21,10 @@ public class PlayerPosition {
     @Column(name = "name", nullable = false)
     private String name;
 
+    @ManyToOne
+    @JoinColumn(name = "sport_id", nullable = false)
+    private Sport Sport;
+
     @Column(name = "description", nullable = false)
     private String description;
 
