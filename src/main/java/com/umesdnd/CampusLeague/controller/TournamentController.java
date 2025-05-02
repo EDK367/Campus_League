@@ -18,12 +18,8 @@ public class TournamentController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Tournament> getTournament(@PathVariable Long id) {
-        try {
-            Tournament tournament = tournamentService.getById(id);
-            return new ResponseEntity<>(tournament, HttpStatus.OK);
-        }catch (RuntimeException e) {
-            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-        }
+        Tournament tournament = tournamentService.getById(id);
+        return new ResponseEntity<>(tournament, HttpStatus.OK);
     }
 
     @GetMapping

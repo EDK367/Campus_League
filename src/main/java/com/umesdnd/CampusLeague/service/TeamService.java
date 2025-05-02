@@ -1,6 +1,6 @@
 package com.umesdnd.CampusLeague.service;
 
-import com.umesdnd.CampusLeague.exception.BadRequestException;
+import com.umesdnd.CampusLeague.exception.NewExceptionType;
 import com.umesdnd.CampusLeague.model.*;
 import com.umesdnd.CampusLeague.repository.PlayerPositionRepository;
 import com.umesdnd.CampusLeague.repository.TeamRepository;
@@ -8,6 +8,7 @@ import com.umesdnd.CampusLeague.service.interfaces.TeamServiceInterface;
 import com.umesdnd.CampusLeague.utills.DuplicateData;
 import org.springdoc.webmvc.ui.SwaggerIndexTransformer;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -43,17 +44,14 @@ public class TeamService implements TeamServiceInterface {
     @Override
     public Team saveOne(Team team) {
 
-        if (team.getCoach() == null) {
-            throw new BadRequestException("No existe coach para el Team");
-        }
         if (team.getName() == null || team.getName().trim().isEmpty()) {
-            throw new BadRequestException("No existe nombre para el Team");
+            throw new NewExceptionType("No existe nombre para el Team" , HttpStatus.BAD_REQUEST);
         }
         if (this.teamRepository.existsByName(team.getName())) {
-            throw new BadRequestException("Ya existe un Team con ese nombre");
+            throw new NewExceptionType("Ya existe un Team con ese nombre", HttpStatus.BAD_REQUEST);
         }
         if (team.getPlayers() == null || team.getPlayers().isEmpty()) {
-            throw new BadRequestException("No existen jugadores para el Team");
+            throw new NewExceptionType("No existen jugadores para el Team", HttpStatus.BAD_REQUEST);
         }
 
         if (team.getStatus() == null) {
@@ -72,28 +70,28 @@ public class TeamService implements TeamServiceInterface {
         List<String> repeated = duplicateData.duplicate(carnets);
 
         if (!repeated.isEmpty()) {
-            throw new BadRequestException("No se puede ingresar carnets duplicados: " + repeated);
+            throw new NewExceptionType("No se puede ingresar carnets duplicados: " + repeated, HttpStatus.BAD_REQUEST);
         }
 
         for (Player player : team.getPlayers()) {
 
             if (player.getNames() == null || player.getNames().trim().isEmpty()) {
-                throw new BadRequestException("No se ingreso nombre para el jugador con carnet: " + player.getCarnet());
+                throw new NewExceptionType("No se ingreso nombre para el jugador con carnet: " + player.getCarnet(), HttpStatus.BAD_REQUEST);
             }
 
             if (player.getAge() <= 0 || player.getAge() > 100) {
-                throw new BadRequestException("La edad no es correcta para el jugador " + player.getNames());
+                throw new NewExceptionType("La edad no es correcta para el jugador " + player.getNames(), HttpStatus.BAD_REQUEST);
             }
 
             if (player.getCarnet() == null || player.getCarnet().trim().isEmpty()) {
-                throw new BadRequestException("No se ingreso carnet para el jugador " + player.getNames());
+                throw new NewExceptionType("No se ingreso carnet para el jugador " + player.getNames(), HttpStatus.BAD_REQUEST);
             }
 
             if (player.getPosition() == null || player.getPosition().getId() == null) {
-                throw new BadRequestException("No se ingreso posicion para el jugador " + player.getNames());
+                throw new NewExceptionType("No se ingreso posicion para el jugador " + player.getNames(), HttpStatus.BAD_REQUEST);
             }
             if (!this.playerPositionRepository.existsById(player.getPosition().getId())) {
-                throw new BadRequestException("No existe la posición  para el jugador " + player.getNames());
+                throw new NewExceptionType("No existe la posición  para el jugador " + player.getNames(), HttpStatus.BAD_REQUEST);
             }
             PlayerPosition fullPosition = playerPositionService.getById(player.getPosition().getId());
             player.setPosition(fullPosition);

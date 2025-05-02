@@ -1,11 +1,11 @@
 package com.umesdnd.CampusLeague.service;
 
-import com.umesdnd.CampusLeague.exception.BadRequestException;
-import com.umesdnd.CampusLeague.exception.GlobalExceptionHandler;
+import com.umesdnd.CampusLeague.exception.NewExceptionType;
 import com.umesdnd.CampusLeague.model.Sport;
 import com.umesdnd.CampusLeague.repository.SportRepository;
 import com.umesdnd.CampusLeague.service.interfaces.SportServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,7 +18,7 @@ public class SportService implements SportServiceInterface {
 
     @Override
     public Sport getById(Long id) {
-        return sportRepository.findById(id).orElseThrow(() -> new BadRequestException("Sport not found"));
+        return sportRepository.findById(id).orElseThrow(() -> new NewExceptionType("Sport not found", HttpStatus.NOT_FOUND));
     }
 
     @Override
@@ -26,7 +26,7 @@ public class SportService implements SportServiceInterface {
 
     @Override
     public Sport update(Long id, Sport sport) {
-        Sport existingSport = sportRepository.findById(id).orElseThrow(() -> new BadRequestException("Sport not found"));
+        Sport existingSport = sportRepository.findById(id).orElseThrow(() -> new RuntimeException("Sport not found"));
 
         existingSport.setSport_name(sport.getSport_name());
 
@@ -36,7 +36,7 @@ public class SportService implements SportServiceInterface {
     @Override
     public void delete(Long id) {
         if (!sportRepository.existsById(id)){
-            throw new BadRequestException("Sport with ID " + id + " not found");
+            throw new RuntimeException("Sport with ID " + id + " not found");
         }
         sportRepository.deleteById(id);
     }

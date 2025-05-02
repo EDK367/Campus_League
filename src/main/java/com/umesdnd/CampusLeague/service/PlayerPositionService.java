@@ -1,10 +1,11 @@
 package com.umesdnd.CampusLeague.service;
 
-import com.umesdnd.CampusLeague.exception.BadRequestException;
+import com.umesdnd.CampusLeague.exception.NewExceptionType;
 import com.umesdnd.CampusLeague.model.PlayerPosition;
 import com.umesdnd.CampusLeague.repository.PlayerPositionRepository;
 import com.umesdnd.CampusLeague.service.interfaces.PlayerPositionServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,7 +18,7 @@ public class PlayerPositionService implements PlayerPositionServiceInterface {
 
     @Override
     public PlayerPosition getById(Long id) {
-        return playerPositionRepository.findById(id).orElseThrow(() -> new BadRequestException("Position not found"));
+        return playerPositionRepository.findById(id).orElseThrow(() -> new NewExceptionType("Position not found", HttpStatus.NOT_FOUND));
     }
 
     @Override
@@ -27,7 +28,7 @@ public class PlayerPositionService implements PlayerPositionServiceInterface {
 
     @Override
     public PlayerPosition update(Long id, PlayerPosition playerPosition) {
-        PlayerPosition existingPosition = playerPositionRepository.findById(id).orElseThrow(() -> new BadRequestException("Position not found"));
+        PlayerPosition existingPosition = playerPositionRepository.findById(id).orElseThrow(() -> new RuntimeException("Position not found"));
 
         existingPosition.setName(playerPosition.getName());
         existingPosition.setDescription(playerPosition.getDescription());
@@ -37,7 +38,7 @@ public class PlayerPositionService implements PlayerPositionServiceInterface {
 
     @Override
     public void delete(Long id) {
-        PlayerPosition existingPosition = playerPositionRepository.findById(id).orElseThrow(() -> new BadRequestException("Position not found"));
+        PlayerPosition existingPosition = playerPositionRepository.findById(id).orElseThrow(() -> new RuntimeException("Position not found"));
 
         playerPositionRepository.delete(existingPosition);
     }

@@ -26,7 +26,12 @@ public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final AuthenticationProvider authProvider;
-
+    // rutas para los end points publicos, solo get
+    private final String[] endPointsGet = {
+            "/torneo/**",
+            "/deporte/**",
+            "/posicion-jugador/**"
+    };
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
@@ -39,9 +44,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.PUT, "/equipo").permitAll()
                         .requestMatchers(HttpMethod.POST, "/jugador").permitAll()
                         .requestMatchers(HttpMethod.PUT, "/jugador").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/torneo/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/deporte/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/posicion-jugador/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, endPointsGet).permitAll()
                         // para documentacion con sweager & sweagger-ui
                         // documentacion: http://localhost:8080/campus-league/api/swagger-ui/index.html
                         .requestMatchers(
