@@ -58,8 +58,12 @@ public class TeamService implements TeamServiceInterface {
             Status status = statusService.getById(2L);
             team.setStatus(status);
         }
-        Coach coach = coachService.saveOne(team.getCoach());
-        team.setCoach(coach);
+
+        if (team.getCoach() != null) {
+            Coach coach = coachService.saveOne(team.getCoach());
+            team.setCoach(coach);
+        }
+       
         Status fullStatus = statusService.getById(team.getStatus().getId());
         team.setStatus(fullStatus);
 
@@ -103,12 +107,13 @@ public class TeamService implements TeamServiceInterface {
 
     @Override
     public Team update(Long id, Team team) {
+        System.out.println(team + " " + id);
         Team existingTeam = teamRepository.findById(id).orElseThrow(() -> new RuntimeException("Team not found with id " + id));
 
         existingTeam.setName(team.getName());
-        existingTeam.setStatus(team.getStatus());
-        existingTeam.setCoach(team.getCoach());
-        existingTeam.setUser(team.getUser());
+        //existingTeam.setStatus(team.getStatus());
+        //existingTeam.setCoach(team.getCoach());
+        //existingTeam.setUser(team.getUser());
 
         return teamRepository.save(existingTeam);
     }

@@ -35,7 +35,7 @@ public class Team {
     private LocalDateTime approved_date;
 
     @ManyToOne
-    @JoinColumn(name = "approved_by", nullable = true, updatable = false)
+    @JoinColumn(name = "approved_by", nullable = true)
     private User user;
 
     @ManyToOne
