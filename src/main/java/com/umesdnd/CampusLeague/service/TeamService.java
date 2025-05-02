@@ -57,12 +57,10 @@ public class TeamService implements TeamServiceInterface {
             Status status = statusService.getById(2L);
             team.setStatus(status);
         }
-
         if (team.getCoach() != null) {
             Coach coach = coachService.saveOne(team.getCoach());
             team.setCoach(coach);
         }
-       
         Status fullStatus = statusService.getById(team.getStatus().getId());
         team.setStatus(fullStatus);
 
