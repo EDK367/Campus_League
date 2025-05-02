@@ -43,9 +43,6 @@ public class TeamService implements TeamServiceInterface {
     @Override
     public Team saveOne(Team team) {
 
-        if (team.getCoach() == null) {
-            throw new BadRequestException("No existe coach para el Team");
-        }
         if (team.getName() == null || team.getName().trim().isEmpty()) {
             throw new BadRequestException("No existe nombre para el Team");
         }
@@ -60,8 +57,12 @@ public class TeamService implements TeamServiceInterface {
             Status status = statusService.getById(2L);
             team.setStatus(status);
         }
-        Coach coach = coachService.saveOne(team.getCoach());
-        team.setCoach(coach);
+
+        if (team.getCoach() != null) {
+            Coach coach = coachService.saveOne(team.getCoach());
+            team.setCoach(coach);
+        }
+       
         Status fullStatus = statusService.getById(team.getStatus().getId());
         team.setStatus(fullStatus);
 
@@ -86,7 +87,7 @@ public class TeamService implements TeamServiceInterface {
             }
 
             if (player.getCarnet() == null || player.getCarnet().trim().isEmpty()) {
-                throw new BadRequestException("No se ingreso carnet para el jugador " + player.getNames());
+                throw new BadRequestException("No se ingreso un carnet para el jugador " + player.getNames());
             }
 
             if (player.getPosition() == null || player.getPosition().getId() == null) {
