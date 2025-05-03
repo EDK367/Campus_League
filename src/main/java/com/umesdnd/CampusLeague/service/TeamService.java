@@ -31,10 +31,13 @@ public class TeamService implements TeamServiceInterface {
 
     @Autowired
     DuplicateData duplicateData;
+
     @Autowired
     private SwaggerIndexTransformer indexPageTransformer;
+
     @Autowired
     private PlayerPositionService playerPositionService;
+
 
     @Override
     public Team getById(Long id) {

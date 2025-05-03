@@ -45,4 +45,5 @@ public class Sanction {
     @ManyToOne
     @JoinColumn(name = "sanction_type_id", nullable = false)
     private SanctionType sanction;
+
 }

@@ -23,5 +23,9 @@ public class Referee {
     private String name;
 
     @Column(name = "experience_years", nullable = false)
-    private int experience_years;
+    private Long experience_years;
+
+    @ManyToOne
+    @JoinColumn(name = "status_id", nullable = true)
+    private Status status;
 }

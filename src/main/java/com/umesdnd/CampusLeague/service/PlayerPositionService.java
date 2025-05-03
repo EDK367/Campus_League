@@ -29,7 +29,6 @@ public class PlayerPositionService implements PlayerPositionServiceInterface {
     @Override
     public PlayerPosition update(Long id, PlayerPosition playerPosition) {
         PlayerPosition existingPosition = playerPositionRepository.findById(id).orElseThrow(() -> new RuntimeException("Position not found"));
-
         existingPosition.setName(playerPosition.getName());
         existingPosition.setDescription(playerPosition.getDescription());
 
