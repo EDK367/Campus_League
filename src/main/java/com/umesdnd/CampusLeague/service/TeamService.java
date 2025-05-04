@@ -10,6 +10,7 @@ import org.springdoc.webmvc.ui.SwaggerIndexTransformer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -38,16 +39,17 @@ public class TeamService implements TeamServiceInterface {
     @Autowired
     private PlayerPositionService playerPositionService;
 
-
-    @Override
+    @Transactional
     public Team getById(Long id) {
-        return teamRepository.findById(id).orElseThrow(() -> new RuntimeException("Team not found with id " + id));
+        Team team = teamRepository.findById(id).orElseThrow(() -> new NewExceptionType("Team not found with id " + id, HttpStatus.NOT_FOUND));
+        team.getPlayers().size();
+        return team;
     }
 
     @Override
     public Team saveOne(Team team) {
 
-        if (team.getName() == null || team.getName().trim().isEmpty()) {
+        if (team.getName() == null || team.getName().trim().isBlank()) {
             throw new NewExceptionType("No existe nombre para el Team" , HttpStatus.BAD_REQUEST);
         }
         if (this.teamRepository.existsByName(team.getName())) {
@@ -82,7 +84,7 @@ public class TeamService implements TeamServiceInterface {
 
         for (Player player : team.getPlayers()) {
 
-            if (player.getNames() == null || player.getNames().trim().isEmpty()) {
+            if (player.getNames() == null || player.getNames().trim().isBlank()) {
                 throw new NewExceptionType("No se ingreso nombre para el jugador con carnet: " + player.getCarnet(), HttpStatus.BAD_REQUEST);
             }
 
@@ -90,7 +92,7 @@ public class TeamService implements TeamServiceInterface {
                 throw new NewExceptionType("La edad no es correcta para el jugador " + player.getNames(), HttpStatus.BAD_REQUEST);
             }
 
-            if (player.getCarnet() == null || player.getCarnet().trim().isEmpty()) {
+            if (player.getCarnet() == null || player.getCarnet().trim().isBlank()) {
                 throw new NewExceptionType("No se ingreso carnet para el jugador " + player.getNames(), HttpStatus.BAD_REQUEST);
             }
 
@@ -114,9 +116,9 @@ public class TeamService implements TeamServiceInterface {
         Team existingTeam = teamRepository.findById(id).orElseThrow(() -> new RuntimeException("Team not found with id " + id));
 
         existingTeam.setName(team.getName());
-        //existingTeam.setStatus(team.getStatus());
-        //existingTeam.setCoach(team.getCoach());
-        //existingTeam.setUser(team.getUser());
+        existingTeam.setStatus(team.getStatus());
+        existingTeam.setCoach(team.getCoach());
+        existingTeam.setUser(team.getUser());
 
         return teamRepository.save(existingTeam);
     }
@@ -128,8 +130,10 @@ public class TeamService implements TeamServiceInterface {
         teamRepository.delete(team);
     }
 
-    @Override
+    @Transactional
     public List<Team> getAll() {
+        List<Team> teams = teamRepository.findAll();
+        teams.forEach(team -> team.getPlayers().size());
         return teamRepository.findAll();
     }
 }

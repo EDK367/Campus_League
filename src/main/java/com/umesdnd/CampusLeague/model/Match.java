@@ -35,21 +35,21 @@ public class Match {
     @Column(name = "match_date", columnDefinition = "DATETIME(6) DEFAULT CURRENT_TIMESTAMP(6)", nullable = true)
     private LocalDateTime match_date;
 
-    @Column(name = "team1_score", nullable = true)
-    private int team1_score;
+    @Column(name = "team1_score", columnDefinition = "INT DEFAULT 0", nullable = true)
+    private Long team1_score;
 
-    @Column(name = "team2_score", nullable = true)
-    private int team2_score;
+    @Column(name = "team2_score", columnDefinition = "INT DEFAULT 0", nullable = true)
+    private Long team2_score;
 
     @ManyToOne
     @JoinColumn(name = "field_id",  nullable = false)
-    private Filed field;
+    private Field field;
 
     @ManyToOne
     @JoinColumn(name = "status_id", nullable = true)
     private Status status;
 
     @ManyToOne
-    @JoinColumn(name = "referee_id", nullable = true)
+    @JoinColumn(name = "referee_id", nullable = false)
     private Referee referee;
 }

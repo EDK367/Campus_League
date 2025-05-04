@@ -35,7 +35,7 @@ public class RefereeService implements RefereeServiceInterface {
                     : "Experience years cannot be greater than 50";
             throw new NewExceptionType(message, HttpStatus.BAD_REQUEST);
         }
-        if (referee.getName() == null || referee.getName().isEmpty()) {
+        if (referee.getName() == null || referee.getName().isBlank()) {
             throw new NewExceptionType("Name cannot be null or empty", HttpStatus.BAD_REQUEST);
         }
         referee.setStatus(statusService.getById(1L));
@@ -60,7 +60,7 @@ public class RefereeService implements RefereeServiceInterface {
             existingReferee.setExperience_years(referee.getExperience_years());
         }
 
-        if (referee.getName() != null && referee.getName().isEmpty()) {
+        if (referee.getName() != null && referee.getName().isBlank()) {
             throw new NewExceptionType("Name cannot be empty", HttpStatus.BAD_REQUEST);
         }
 

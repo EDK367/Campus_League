@@ -28,7 +28,7 @@ public class SanctionTypeService implements SanctionTypeServiceInterface {
             throw new NewExceptionType("Type name already exists", HttpStatus.BAD_REQUEST);
         }
 
-        if (sanctionType.getType_name() == null || sanctionType.getType_name().isEmpty()) {
+        if (sanctionType.getType_name() == null || sanctionType.getType_name().isBlank()) {
             throw new NewExceptionType("Type name cannot be empty", HttpStatus.BAD_REQUEST);
         }
 
@@ -42,7 +42,7 @@ public class SanctionTypeService implements SanctionTypeServiceInterface {
         if (sanctionTypeRepository.existsByTypeName(sanctionType.getType_name())) {
             throw new NewExceptionType("Type name already exists", HttpStatus.BAD_REQUEST);
         }
-        if (sanctionType.getType_name() == null || sanctionType.getType_name().isEmpty()) {
+        if (sanctionType.getType_name() == null || sanctionType.getType_name().isBlank()) {
             throw new NewExceptionType("Type name cannot be empty", HttpStatus.BAD_REQUEST);
         }
 

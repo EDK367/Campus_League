@@ -38,15 +38,15 @@ public class UserService implements UserInterfaceService {
             throw new NewExceptionType("No se recivio ningun usuario", HttpStatus.BAD_REQUEST);
         }
 
-        if (user.getUsername() == null || user.getUsername().trim().isEmpty()) {
+        if (user.getUsername() == null || user.getUsername().trim().isBlank()) {
             throw new NewExceptionType("El nombre de usuario no puede estar vacío", HttpStatus.BAD_REQUEST);
         }
 
-        if (user.getPassword() == null || user.getPassword().trim().isEmpty()) {
+        if (user.getPassword() == null || user.getPassword().trim().isBlank()) {
             throw new NewExceptionType("La contraseña no puede estar vacía", HttpStatus.BAD_REQUEST);
         }
 
-        if (user.getEmail() == null || user.getEmail().trim().isEmpty()) {
+        if (user.getEmail() == null || user.getEmail().trim().isBlank()) {
             throw new NewExceptionType("El correo electrónico no puede estar vacío", HttpStatus.BAD_REQUEST);
         }
 
