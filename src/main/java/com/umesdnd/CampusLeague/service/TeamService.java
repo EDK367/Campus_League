@@ -2,6 +2,7 @@ package com.umesdnd.CampusLeague.service;
 
 import com.umesdnd.CampusLeague.exception.NewExceptionType;
 import com.umesdnd.CampusLeague.model.*;
+import com.umesdnd.CampusLeague.model.DTO.TeamDTO;
 import com.umesdnd.CampusLeague.repository.PlayerPositionRepository;
 import com.umesdnd.CampusLeague.repository.TeamRepository;
 import com.umesdnd.CampusLeague.service.interfaces.TeamServiceInterface;
@@ -38,6 +39,28 @@ public class TeamService implements TeamServiceInterface {
 
     @Autowired
     private PlayerPositionService playerPositionService;
+
+
+    @Transactional
+    public TeamDTO getWithPlayers(Long id) {
+        Team team = teamRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Team not found with id " + id));
+
+        team.getPlayers().size();
+
+        TeamDTO teamDTO = TeamDTO.builder()
+                .id(team.getId())
+                .name(team.getName())
+                .inscription_date(team.getInscription_date())
+                .approved_date(team.getApproved_date())
+                .user(team.getUser())
+                .status(team.getStatus())
+                .coach(team.getCoach())
+                .players(team.getPlayers())
+                .build();
+
+        return teamDTO;
+    }
 
     @Transactional
     public Team getById(Long id) {

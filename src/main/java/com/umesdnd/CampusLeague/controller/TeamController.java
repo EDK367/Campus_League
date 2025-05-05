@@ -1,5 +1,6 @@
 package com.umesdnd.CampusLeague.controller;
 
+import com.umesdnd.CampusLeague.model.DTO.TeamDTO;
 import com.umesdnd.CampusLeague.model.Team;
 import com.umesdnd.CampusLeague.service.TeamService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +18,8 @@ public class TeamController {
     private TeamService teamService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<Team> getTeamById(@PathVariable Long id) {
-            Team team = teamService.getById(id);
+    public ResponseEntity<TeamDTO> getTeamById(@PathVariable Long id) {
+            TeamDTO team = teamService.getWithPlayers(id);
             return new ResponseEntity<>(team, HttpStatus.OK);
     }
 
