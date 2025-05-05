@@ -8,6 +8,7 @@ import com.umesdnd.CampusLeague.service.interfaces.MatchServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -36,14 +37,14 @@ public class MatchService implements MatchServiceInterface {
     @Autowired
     private TeamRepository teamRepository;
 
-    @Override
+    @Transactional
     public Match getById(Long id) {
         return matchRepository.findById(id).orElseThrow(() -> new NewExceptionType("Match not found", HttpStatus.NOT_FOUND));
     }
 
-    @Override
+    @Transactional
     public Match saveOne(Match match) {
-        System.out.println(match);
+        //System.out.println(match);
         // validacion de objetos
         if (match.getTournament() == null) {
             throw new NewExceptionType("Tournament is required", HttpStatus.BAD_REQUEST);
@@ -72,7 +73,45 @@ public class MatchService implements MatchServiceInterface {
         if (existingTournament.getEnd_date().isBefore(LocalDateTime.now())) {
             throw new NewExceptionType("Tournament is already finished", HttpStatus.BAD_REQUEST);
         }
-        return null;
+
+        // validacion de equipos, campo y del referee
+        if (existingTeam1.getStatus().getId() != 1) {
+            throw new NewExceptionType("Team: " + existingTeam1.getName() + " is loser", HttpStatus.BAD_REQUEST);
+        }
+        if (existingTeam2.getStatus().getId() != 1) {
+            throw new NewExceptionType("Team: " + existingTeam2.getName() + " is loser", HttpStatus.BAD_REQUEST);
+        }
+        if (existingField.getStatus().getId() != 1) {
+            throw new NewExceptionType("Field: " + existingField.getName() + " is not available", HttpStatus.BAD_REQUEST);
+        }
+        if (existingReferee.getStatus().getId() != 1) {
+            throw new NewExceptionType("Referee: " + existingReferee.getName() + " is not available", HttpStatus.BAD_REQUEST);
+        }
+        if (existingTeam1.getId() == existingTeam2.getId()) {
+            throw new NewExceptionType("Teams are the same", HttpStatus.BAD_REQUEST);
+        }
+        int minMembers = existingTournament.getMin_team_members();
+        int maxMembers = existingTournament.getMax_team_members();
+        if (existingTeam1.getPlayers().size() < minMembers || existingTeam1.getPlayers().size() > maxMembers) {
+            throw new NewExceptionType("Team: " + existingTeam1.getName() + " does not comply with the tournament's rules.", HttpStatus.BAD_REQUEST);
+        }
+        if (existingTeam2.getPlayers().size() < minMembers || existingTeam2.getPlayers().size() > maxMembers) {
+            throw new NewExceptionType("Team: " + existingTeam2.getName() + " does not comply with the tournament's rules.", HttpStatus.BAD_REQUEST);
+        }
+        // validaciones extras
+
+
+        // ingreso de datos
+        match.setTournament(existingTournament);
+        match.setTeam1(existingTeam1);
+        match.setTeam2(existingTeam2);
+        match.setTeam1_score(0L);
+        match.setTeam2_score(0L);
+        match.setStatus(statusService.getById(1L));
+        match.setField(existingField);
+        match.setReferee(existingReferee);
+
+        return matchRepository.save(match);
     }
 
     @Override
@@ -82,10 +121,12 @@ public class MatchService implements MatchServiceInterface {
 
     @Override
     public void delete(Long id) {
-
+        Match existingMatch = matchRepository.findById(id).orElseThrow(() -> new NewExceptionType("Match not found", HttpStatus.NOT_FOUND));
+        existingMatch.setStatus(statusService.getById(2L));
+        matchRepository.save(existingMatch);
     }
 
-    @Override
+    @Transactional
     public List<Match> getAll() {
         return matchRepository.findAll();
     }
@@ -94,4 +135,5 @@ public class MatchService implements MatchServiceInterface {
     public List<Match> generateMatch(Match match) {
         return List.of();
     }
+
 }
