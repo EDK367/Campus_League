@@ -43,8 +43,7 @@ public class TeamService implements TeamServiceInterface {
 
     @Transactional
     public TeamDTO getWithPlayers(Long id) {
-        Team team = teamRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Team not found with id " + id));
+        Team team = teamRepository.findById(id).orElseThrow(() -> new NewExceptionType("Team not found with", HttpStatus.NOT_FOUND));
 
         team.getPlayers().size();
 

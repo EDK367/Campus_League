@@ -26,4 +26,5 @@ public class TeamDTO {
     private Status status;
     private Coach coach;
     private List<Player> players;
+
 }
