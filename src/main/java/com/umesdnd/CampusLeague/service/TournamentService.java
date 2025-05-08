@@ -15,6 +15,8 @@ public class TournamentService implements TournamentServiceInterface{
 
     @Autowired
     private TournamentRepository tournamentRepository;
+    @Autowired
+    private StatusService statusService;
 
     @Override
     public Tournament getById(Long id) {
@@ -42,10 +44,9 @@ public class TournamentService implements TournamentServiceInterface{
 
     @Override
     public void delete(Long id) {
-        if (!tournamentRepository.existsById(id)){
-            throw new RuntimeException("Tournament with ID " + id + " not found");
-        }
-        tournamentRepository.deleteById(id);
+        Tournament existingTournament = tournamentRepository.findById(id).orElseThrow(() -> new NewExceptionType("Tournament not found", HttpStatus.NOT_FOUND));
+        existingTournament.setStatus(statusService.getById(2L));
+        tournamentRepository.save(existingTournament);
     }
 
     @Override

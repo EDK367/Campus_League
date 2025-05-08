@@ -95,7 +95,7 @@ public class FieldService implements FieldServiceInterface {
     @Override
     public void delete(Long id) {
         Field existingField = fieldRepository.findById(id).orElseThrow(() -> new NewExceptionType("Field not found", HttpStatus.NOT_FOUND));
-        existingField.setStatus(statusService.getById(2L));
+        existingField.setStatus(statusService.getById(7L));
         fieldRepository.save(existingField);
     }
 

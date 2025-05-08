@@ -122,7 +122,7 @@ public class MatchService implements MatchServiceInterface {
     @Override
     public void delete(Long id) {
         Match existingMatch = matchRepository.findById(id).orElseThrow(() -> new NewExceptionType("Match not found", HttpStatus.NOT_FOUND));
-        existingMatch.setStatus(statusService.getById(2L));
+        existingMatch.setStatus(statusService.getById(7L));
         matchRepository.save(existingMatch);
     }
 

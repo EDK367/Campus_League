@@ -1,10 +1,13 @@
 package com.umesdnd.CampusLeague.service;
 
+import com.umesdnd.CampusLeague.exception.NewExceptionType;
+import com.umesdnd.CampusLeague.model.Match;
 import com.umesdnd.CampusLeague.model.Player;
 import com.umesdnd.CampusLeague.model.Status;
 import com.umesdnd.CampusLeague.repository.PlayerRepository;
 import com.umesdnd.CampusLeague.service.interfaces.PlayerServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -48,10 +51,9 @@ public class PlayerService implements PlayerServiceInterface {
 
     @Override
     public void delete(Long id) {
-        if (!playerRepository.existsById(id)) {
-            throw new RuntimeException("Player with ID " + id + " not found");
-        }
-        playerRepository.deleteById(id);
+        Player existingPlayer = playerRepository.findById(id).orElseThrow(() -> new NewExceptionType("Player not found", HttpStatus.NOT_FOUND));
+        existingPlayer.setStatus(statusService.getById(7L));
+        playerRepository.save(existingPlayer);
     }
 
     @Override
