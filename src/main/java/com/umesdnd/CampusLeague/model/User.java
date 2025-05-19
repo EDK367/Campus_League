@@ -60,7 +60,7 @@ public class User implements UserDetails {
     }
     @Override
     public boolean isEnabled() {
-        if (this.status.getStatus_name().equalsIgnoreCase("Active")) {
+        if (this.status.getId() == 1) {
             return true;
         }
         return false;

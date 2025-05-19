@@ -19,8 +19,8 @@ public class TournamentTeam {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "points", nullable = false)
-    private int points;
+    @Column(name = "points", nullable = true)
+    private Long points;
 
     @ManyToOne
     @JoinColumn(name = "tournament_id", nullable = false)

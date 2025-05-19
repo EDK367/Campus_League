@@ -16,7 +16,7 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<AuthenticationResponse> login(@RequestBody LoginRequest request){
-        System.out.println("entra");
+        //System.out.println("entra");
         return ResponseEntity.ok(authService.login(request));
     }
 }
