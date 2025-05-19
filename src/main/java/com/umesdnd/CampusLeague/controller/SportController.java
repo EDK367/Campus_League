@@ -36,4 +36,5 @@ public class SportController {
         Sport sport = sportService.getById(id);
         return new ResponseEntity<>(sport, HttpStatus.OK);
     }
+
 }

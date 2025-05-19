@@ -1,9 +1,11 @@
 package com.umesdnd.CampusLeague.service;
 
+import com.umesdnd.CampusLeague.exception.NewExceptionType;
 import com.umesdnd.CampusLeague.model.Tournament;
 import com.umesdnd.CampusLeague.repository.TournamentRepository;
 import com.umesdnd.CampusLeague.service.interfaces.TournamentServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,7 +18,7 @@ public class TournamentService implements TournamentServiceInterface{
 
     @Override
     public Tournament getById(Long id) {
-        return tournamentRepository.findById(id).orElseThrow(() -> new RuntimeException("Tournament not found"));
+        return tournamentRepository.findById(id).orElseThrow(() -> new NewExceptionType("Tournament not found", HttpStatus.NOT_FOUND));
     }
 
     @Override

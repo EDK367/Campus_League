@@ -17,7 +17,7 @@ public class StatusService implements StatusServiceInterface {
 
     @Override
     public Status getById(Long id) {
-        return statusRepository.findById(id).orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+        return statusRepository.findById(id).orElseThrow(() -> new RuntimeException("Status not found"));
     }
 
     @Override

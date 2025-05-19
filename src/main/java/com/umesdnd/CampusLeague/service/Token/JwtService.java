@@ -83,7 +83,7 @@ public class JwtService {
         Calendar expirationCalendar = Calendar.getInstance();
 
         if (currentHour < 8) {
-            expirationCalendar.add(Calendar.HOUR_OF_DAY, 3);
+            expirationCalendar.add(Calendar.HOUR_OF_DAY, 1);
         } else {
             expirationCalendar.set(Calendar.HOUR_OF_DAY, hour);
             expirationCalendar.set(Calendar.MINUTE, 0);
@@ -92,7 +92,7 @@ public class JwtService {
 
             if (expirationCalendar.getTime().before(new Date())) {
                 expirationCalendar = Calendar.getInstance();
-                expirationCalendar.add(Calendar.HOUR_OF_DAY, 3);
+                expirationCalendar.add(Calendar.HOUR_OF_DAY, 1);
             }
         }
 

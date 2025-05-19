@@ -5,7 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -27,13 +29,13 @@ public class Tournament {
     @JoinColumn(name = "sport_id", nullable = false)
     private Sport sport;
 
-    @Temporal(TemporalType.DATE)
+    @CreationTimestamp
     @Column(name = "start_date", nullable = false)
-    private Date start_date;
+    private LocalDateTime start_date;
 
-    @Temporal(TemporalType.DATE)
+    @CreationTimestamp
     @Column(name = "end_date", nullable = false)
-    private Date end_date;
+    private LocalDateTime end_date;
 
     @Column(name = "description", nullable = false)
     private String description;
