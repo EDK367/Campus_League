@@ -32,8 +32,7 @@ public class Team {
     @Column(name = "inscription_date", columnDefinition = "DATETIME(6) DEFAULT CURRENT_TIMESTAMP(6)", nullable = true, updatable = false)
     private LocalDateTime inscription_date;
 
-    @CreationTimestamp
-    @Column(name = "approved_date", columnDefinition = "DATETIME(6) DEFAULT CURRENT_TIMESTAMP(6)", nullable = true, updatable = false)
+    @Column(name = "approved_date", nullable = true, updatable = false)
     private LocalDateTime approved_date;
 
     @ManyToOne
@@ -52,6 +51,9 @@ public class Team {
     @JsonManagedReference
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private List<Player> players;
+
+    @Column(name = "captain", nullable = false)
+    private String captain;
 
 
 }

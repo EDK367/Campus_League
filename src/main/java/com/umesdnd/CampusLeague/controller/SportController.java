@@ -21,6 +21,12 @@ public class SportController {
     @Autowired
     private SportService sportService;
 
+    @GetMapping("/{id}")
+    public ResponseEntity<Sport> getSportById(@PathVariable Long id) {
+        Sport sport = sportService.getById(id);
+        return new ResponseEntity<>(sport, HttpStatus.OK);
+    }
+
     @GetMapping
     public ResponseEntity<List<Sport>> getAllSports() {
         try {
@@ -30,11 +36,4 @@ public class SportController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<Sport> getSportById(@PathVariable Long id) {
-        Sport sport = sportService.getById(id);
-        return new ResponseEntity<>(sport, HttpStatus.OK);
-    }
-
 }

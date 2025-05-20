@@ -30,7 +30,10 @@ public class SecurityConfig {
     private final String[] endPointsGet = {
             "/torneo/**",
             "/deporte/**",
-            "/posicion-jugador/**"
+            "/posicion-jugador/**",
+            "/equipo-torneo/**",
+            "/ganador/**",
+            "/inscripcion/**"
     };
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {

@@ -70,7 +70,11 @@ public class TeamService implements TeamServiceInterface {
 
     @Override
     public Team saveOne(Team team) {
+        System.out.println("aca esta el team ");
 
+        if (team == null) {
+            throw new NewExceptionType("No existe Team", HttpStatus.BAD_REQUEST);
+        }
         if (team.getName() == null || team.getName().trim().isBlank()) {
             throw new NewExceptionType("No existe nombre para el Team" , HttpStatus.BAD_REQUEST);
         }
@@ -90,6 +94,11 @@ public class TeamService implements TeamServiceInterface {
             Coach coach = coachService.saveOne(team.getCoach());
             team.setCoach(coach);
         }
+
+        if (team.getCaptain() == null || team.getCaptain().trim().isBlank()) {
+            throw new NewExceptionType("No existe nombre para el capitan", HttpStatus.BAD_REQUEST);
+        }
+
        
         Status fullStatus = statusService.getById(team.getStatus().getId());
         team.setStatus(fullStatus);
@@ -124,9 +133,10 @@ public class TeamService implements TeamServiceInterface {
             if (!this.playerPositionRepository.existsById(player.getPosition().getId())) {
                 throw new NewExceptionType("No existe la posición  para el jugador " + player.getNames(), HttpStatus.BAD_REQUEST);
             }
+
             PlayerPosition fullPosition = playerPositionService.getById(player.getPosition().getId());
             player.setPosition(fullPosition);
-
+            player.setStatus(statusService.getById(2L));
             player.setTeam(team);
         }
         return teamRepository.save(team);
@@ -141,7 +151,7 @@ public class TeamService implements TeamServiceInterface {
         existingTeam.setStatus(team.getStatus());
         existingTeam.setCoach(team.getCoach());
         existingTeam.setUser(team.getUser());
-
+        existingTeam.setCaptain(team.getCaptain());
         return teamRepository.save(existingTeam);
     }
 

@@ -29,11 +29,9 @@ public class Tournament {
     @JoinColumn(name = "sport_id", nullable = false)
     private Sport sport;
 
-    @CreationTimestamp
     @Column(name = "start_date", nullable = false)
     private LocalDateTime start_date;
 
-    @CreationTimestamp
     @Column(name = "end_date", nullable = false)
     private LocalDateTime end_date;
 

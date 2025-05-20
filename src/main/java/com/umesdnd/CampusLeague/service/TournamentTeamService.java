@@ -12,7 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.swing.*;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -29,12 +29,14 @@ public class TournamentTeamService implements TournamentTeamServiceInterface {
 
     @Autowired
     private TournamentGroupService tournamentGroupService;
+    @Autowired
+    private StatusService statusService;
 
 
     @Override
     public TournamentTeam getById(Long id) {
         return tournamentTRepository.findById(id).orElseThrow(
-                () -> new NewExceptionType("Tournament team not found", HttpStatus.NOT_FOUND));
+                () -> new NewExceptionType("Tournament Team not found", HttpStatus.NOT_FOUND));
     }
 
     @Transactional
@@ -59,25 +61,38 @@ public class TournamentTeamService implements TournamentTeamServiceInterface {
                throw new NewExceptionType("Tournament cannot be null", HttpStatus.BAD_REQUEST);
         }
         Tournament tournament = tournamentService.getById(tournamentTeam.getTournament().getId());
+        tournamentTeam.setTournament(tournament);
         if (tournamentTeam.getTeam().getId() == null) {
             throw new NewExceptionType("Team cannot be null", HttpStatus.BAD_REQUEST);
         }
         Team team = teamService.getById(tournamentTeam.getTeam().getId());
+        team.setStatus(statusService.getById(1L));
+        tournamentTeam.setTeam(team);
         if (tournamentTeam.getGroup().getId() == null) {
             throw new NewExceptionType("Group cannot be null", HttpStatus.BAD_REQUEST);
         }
         TournamentGroup group = tournamentGroupService.getById(tournamentTeam.getGroup().getId());
+        tournamentTeam.setGroup(group);
+        if (tournament.getEnd_date().isBefore(LocalDateTime.now())) {
+            throw new NewExceptionType("Tournament has already ended", HttpStatus.BAD_REQUEST);
+        }
+        if (team.getPlayers().size() > tournament.getMax_team_members() || team.getPlayers().size() < tournament.getMin_team_members()) {
+            throw new NewExceptionType("Team is not valid", HttpStatus.BAD_REQUEST);
+        }
 
 
 
-        return null;
+        return tournamentTRepository.save(tournamentTeam);
     }
 
-    @Override
+    // pendiente
+    @Transactional
     public TournamentTeam update(Long id, TournamentTeam tournamentTeam) {
         return null;
     }
 
+
+    // pendiente
     @Override
     public void delete(Long id) {
 
@@ -85,6 +100,6 @@ public class TournamentTeamService implements TournamentTeamServiceInterface {
 
     @Override
     public List<TournamentTeam> getAll() {
-        return List.of();
+        return tournamentTRepository.findAll();
     }
 }

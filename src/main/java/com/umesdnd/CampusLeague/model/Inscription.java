@@ -22,12 +22,10 @@ public class Inscription {
     @JoinColumn(name = "tournament_id", nullable = false)
     private Tournament tournament;
 
-    @CreationTimestamp
-    @Column(name = "open_date", columnDefinition = "DATETIME(6) DEFAULT CURRENT_TIMESTAMP(6)", nullable = false)
+    @Column(name = "open_date", nullable = true)
     private LocalDateTime open_date;
 
-    @CreationTimestamp
-    @Column(name = "close_date", columnDefinition = "DATETIME(6) DEFAULT CURRENT_TIMESTAMP(6)", nullable = false)
+    @Column(name = "close_date", nullable = true)
     private LocalDateTime close_date;
 
     @ManyToOne

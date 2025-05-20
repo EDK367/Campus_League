@@ -29,10 +29,10 @@ public class TeamController {
         return new ResponseEntity<>(teams, HttpStatus.OK);
     }
 
-    @PostMapping
+    @PostMapping("")
     public ResponseEntity<Team> saveTeam(@RequestBody Team team) {
-            Team savedTeam = teamService.saveOne(team);
-            return new ResponseEntity<>(savedTeam, HttpStatus.CREATED);
+        Team savedTeam = teamService.saveOne(team);
+        return new ResponseEntity<>(savedTeam, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
