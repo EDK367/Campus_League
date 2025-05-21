@@ -23,7 +23,7 @@ public class PlayerPosition {
 
     @ManyToOne
     @JoinColumn(name = "sport_id", nullable = false)
-    private Sport Sport;
+    private Sport sport;
 
     @Column(name = "description", nullable = false)
     private String description;

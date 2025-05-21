@@ -16,6 +16,12 @@ public class PlayerPositionService implements PlayerPositionServiceInterface {
     @Autowired
     private PlayerPositionRepository playerPositionRepository;
 
+
+    @Override
+    public List<PlayerPosition> getPositionSport(Long idSport) {
+        return playerPositionRepository.findBySport_Id(idSport);
+    }
+
     @Override
     public PlayerPosition getById(Long id) {
         return playerPositionRepository.findById(id).orElseThrow(() -> new NewExceptionType("Position not found", HttpStatus.NOT_FOUND));
