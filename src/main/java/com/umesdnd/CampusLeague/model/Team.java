@@ -55,5 +55,8 @@ public class Team {
     @Column(name = "captain", nullable = false)
     private String captain;
 
+    @ManyToOne
+    @JoinColumn(name = "tournament_id", nullable = false)
+    private Tournament tournament;
 
 }

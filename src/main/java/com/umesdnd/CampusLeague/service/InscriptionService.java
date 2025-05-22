@@ -45,7 +45,7 @@ public class InscriptionService implements InscriptionServiceInterface {
         if (inscription.getTournament().getId() == null) {
             throw new NewExceptionType("Tournament id cannot be null", HttpStatus.BAD_REQUEST);
         }
-        Tournament tournament =tournamentService.getById(inscription.getTournament().getId());
+        Tournament tournament = tournamentService.getById(inscription.getTournament().getId());
 
         if (inscription.getUser() == null) {
             throw new NewExceptionType("User cannot be null", HttpStatus.BAD_REQUEST);

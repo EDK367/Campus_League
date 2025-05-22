@@ -9,6 +9,9 @@ public class HashPass {
 
         String hashedPassword = encoder.encode(plainPassword);
 
+        for (int i = 0; i < 20; i++) {
+            System.out.println("hjola " + i);
+        }
         System.out.println("Contraseña encriptada: " + hashedPassword);
     }
 }

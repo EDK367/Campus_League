@@ -3,6 +3,7 @@ package com.umesdnd.CampusLeague.service;
 import com.umesdnd.CampusLeague.exception.NewExceptionType;
 import com.umesdnd.CampusLeague.model.*;
 import com.umesdnd.CampusLeague.model.DTO.TeamDTO;
+import com.umesdnd.CampusLeague.repository.InscriptionRepository;
 import com.umesdnd.CampusLeague.repository.PlayerPositionRepository;
 import com.umesdnd.CampusLeague.repository.TeamRepository;
 import com.umesdnd.CampusLeague.service.interfaces.TeamServiceInterface;
@@ -13,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,6 +23,12 @@ public class TeamService implements TeamServiceInterface {
 
     @Autowired
     private TeamRepository teamRepository;
+
+    @Autowired
+    private TournamentService tournamentService;
+
+    @Autowired
+    private InscriptionRepository inscriptionRepository;
 
     @Autowired
     private CoachService coachService;
@@ -68,7 +76,7 @@ public class TeamService implements TeamServiceInterface {
         return team;
     }
 
-    @Override
+    @Transactional
     public Team saveOne(Team team) {
         System.out.println("aca esta el team ");
 
@@ -84,6 +92,24 @@ public class TeamService implements TeamServiceInterface {
         if (team.getPlayers() == null || team.getPlayers().isEmpty()) {
             throw new NewExceptionType("No existen jugadores para el Team", HttpStatus.BAD_REQUEST);
         }
+        if (team.getTournament() == null || team.getTournament().getId() == null) {
+            throw new NewExceptionType("No existe torneo para el Team", HttpStatus.BAD_REQUEST);
+        }
+
+        Tournament  tournament = tournamentService.getById(team.getTournament().getId());
+
+        Inscription inscription = inscriptionRepository.findByTournamentId(tournament.getId()).orElseThrow(() -> new NewExceptionType("Inscripcion no disponible", HttpStatus.BAD_REQUEST));
+
+        if (inscription.getClose_date() == null || inscription.getOpen_date() == null) {
+            throw new NewExceptionType("Inscripcion no disponible", HttpStatus.BAD_REQUEST);
+        }
+        if (inscription.getOpen_date().isAfter(LocalDateTime.now())) {
+            throw new NewExceptionType("Inscripcion no abierta", HttpStatus.BAD_REQUEST);
+        }
+
+        if (inscription.getClose_date().isBefore(LocalDateTime.now())) {
+            throw new NewExceptionType("Inscripciones cerradas", HttpStatus.BAD_REQUEST);
+        }
 
         if (team.getStatus() == null) {
             Status status = statusService.getById(2L);
@@ -96,7 +122,7 @@ public class TeamService implements TeamServiceInterface {
         }
 
         if (team.getCaptain() == null || team.getCaptain().trim().isBlank()) {
-            throw new NewExceptionType("No existe nombre para el capitan", HttpStatus.BAD_REQUEST);
+            throw new NewExceptionType("No se ingreso el Capitan", HttpStatus.BAD_REQUEST);
         }
 
        
@@ -139,6 +165,7 @@ public class TeamService implements TeamServiceInterface {
             player.setStatus(statusService.getById(2L));
             player.setTeam(team);
         }
+        team.setTournament(tournament);
         return teamRepository.save(team);
     }
 
@@ -152,6 +179,7 @@ public class TeamService implements TeamServiceInterface {
         existingTeam.setCoach(team.getCoach());
         existingTeam.setUser(team.getUser());
         existingTeam.setCaptain(team.getCaptain());
+        existingTeam.setTournament(team.getTournament());
         return teamRepository.save(existingTeam);
     }
 
