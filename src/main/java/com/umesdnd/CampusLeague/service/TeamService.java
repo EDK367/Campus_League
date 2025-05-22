@@ -5,6 +5,7 @@ import com.umesdnd.CampusLeague.model.*;
 import com.umesdnd.CampusLeague.model.DTO.TeamDTO;
 import com.umesdnd.CampusLeague.repository.InscriptionRepository;
 import com.umesdnd.CampusLeague.repository.PlayerPositionRepository;
+import com.umesdnd.CampusLeague.repository.PlayerRepository;
 import com.umesdnd.CampusLeague.repository.TeamRepository;
 import com.umesdnd.CampusLeague.service.interfaces.TeamServiceInterface;
 import com.umesdnd.CampusLeague.utills.DuplicateData;
@@ -26,6 +27,12 @@ public class TeamService implements TeamServiceInterface {
 
     @Autowired
     private TournamentService tournamentService;
+
+    @Autowired
+    private PlayerService playerService;
+
+    @Autowired
+    private PlayerRepository playerRepository;
 
     @Autowired
     private InscriptionRepository inscriptionRepository;
@@ -160,9 +167,10 @@ public class TeamService implements TeamServiceInterface {
                 throw new NewExceptionType("No existe la posición  para el jugador " + player.getNames(), HttpStatus.BAD_REQUEST);
             }
 
+
             PlayerPosition fullPosition = playerPositionService.getById(player.getPosition().getId());
             player.setPosition(fullPosition);
-            player.setStatus(statusService.getById(2L));
+            player.setStatus(statusService.getById(1L));
             player.setTeam(team);
         }
         team.setTournament(tournament);

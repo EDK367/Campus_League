@@ -1,10 +1,12 @@
 package com.umesdnd.CampusLeague.service;
 
+import com.umesdnd.CampusLeague.exception.NewExceptionType;
 import com.umesdnd.CampusLeague.model.Player;
 import com.umesdnd.CampusLeague.model.Status;
 import com.umesdnd.CampusLeague.repository.PlayerRepository;
 import com.umesdnd.CampusLeague.service.interfaces.PlayerServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,7 +23,7 @@ public class PlayerService implements PlayerServiceInterface {
     @Override
     public Player getById(Long id) {
         return playerRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Player with ID " + id + " not found"));
+                .orElseThrow(() -> new NewExceptionType("Player with ID " + id + " not found", HttpStatus.NOT_FOUND));
     }
 
     @Override
