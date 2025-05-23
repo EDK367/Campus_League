@@ -48,8 +48,12 @@ public class Team {
     private Coach coach;
 
     @OneToMany(mappedBy = "team", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
+    @JsonManagedReference(value = "team-teamPlayers")
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    private List<TeamPlayer> teamPlayers;
+
+    // solo para recibir
+    @Transient
     private List<Player> players;
 
     @Column(name = "captain", nullable = false)

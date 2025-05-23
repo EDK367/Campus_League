@@ -76,10 +76,11 @@ public class TournamentTeamService implements TournamentTeamServiceInterface {
         if (tournament.getEnd_date().isBefore(LocalDateTime.now())) {
             throw new NewExceptionType("Tournament has already ended", HttpStatus.BAD_REQUEST);
         }
-        if (team.getPlayers().size() > tournament.getMax_team_members() || team.getPlayers().size() < tournament.getMin_team_members()) {
+
+       /* if (team.getPlayers().size() > tournament.getMax_team_members() || team.getPlayers().size() < tournament.getMin_team_members()) {
             throw new NewExceptionType("Team is not valid", HttpStatus.BAD_REQUEST);
         }
-
+        */
 
 
         return tournamentTRepository.save(tournamentTeam);

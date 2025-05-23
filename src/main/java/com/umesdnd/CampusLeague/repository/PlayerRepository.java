@@ -10,6 +10,9 @@ import java.util.Optional;
 
 @Repository
 public interface PlayerRepository extends JpaRepository<Player, Long> {
-    @Query("SELECT p FROM Player p WHERE p.team.id = :teamId")
-    public List<Player> getByTeam(Long teamId);
+    //@Query("SELECT p FROM Player p WHERE p.team.id = :teamId")
+    //public List<Player> getByTeam(Long teamId);
+
+    boolean existsByCarnet(String carnet);
+    List<Player> findByCarnet(String email);
 }

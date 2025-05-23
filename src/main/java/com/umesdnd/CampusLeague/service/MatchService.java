@@ -90,16 +90,20 @@ public class MatchService implements MatchServiceInterface {
         if (existingTeam1.getId() == existingTeam2.getId()) {
             throw new NewExceptionType("Teams are the same", HttpStatus.BAD_REQUEST);
         }
+
         int minMembers = existingTournament.getMin_team_members();
         int maxMembers = existingTournament.getMax_team_members();
-        if (existingTeam1.getPlayers().size() < minMembers || existingTeam1.getPlayers().size() > maxMembers) {
+
+        int team1Members = existingTeam1.getTeamPlayers().size();
+        int team2Members = existingTeam2.getTeamPlayers().size();
+
+        if (team1Members < minMembers || team1Members > maxMembers) {
             throw new NewExceptionType("Team: " + existingTeam1.getName() + " does not comply with the tournament's rules.", HttpStatus.BAD_REQUEST);
         }
-        if (existingTeam2.getPlayers().size() < minMembers || existingTeam2.getPlayers().size() > maxMembers) {
+        if (team2Members < minMembers || team2Members > maxMembers) {
             throw new NewExceptionType("Team: " + existingTeam2.getName() + " does not comply with the tournament's rules.", HttpStatus.BAD_REQUEST);
         }
         // validaciones extras
-
 
         // ingreso de datos
         match.setTournament(existingTournament);

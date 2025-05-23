@@ -60,7 +60,9 @@ public class TeamService implements TeamServiceInterface {
     public TeamDTO getWithPlayers(Long id) {
         Team team = teamRepository.findById(id).orElseThrow(() -> new NewExceptionType("Team not found with", HttpStatus.NOT_FOUND));
 
-        team.getPlayers().size();
+        List<Player> players = team.getTeamPlayers().stream()
+                .map(TeamPlayer::getPlayer)
+                .collect(Collectors.toList());
 
         TeamDTO teamDTO = TeamDTO.builder()
                 .id(team.getId())
@@ -70,7 +72,7 @@ public class TeamService implements TeamServiceInterface {
                 .user(team.getUser())
                 .status(team.getStatus())
                 .coach(team.getCoach())
-                .players(team.getPlayers())
+                .players(players)
                 .build();
 
         return teamDTO;
@@ -79,43 +81,45 @@ public class TeamService implements TeamServiceInterface {
     @Transactional
     public Team getById(Long id) {
         Team team = teamRepository.findById(id).orElseThrow(() -> new NewExceptionType("Team not found with id " + id, HttpStatus.NOT_FOUND));
-        team.getPlayers().size();
+        team.getTeamPlayers().size();
         return team;
     }
 
     @Transactional
     public Team saveOne(Team team) {
-        System.out.println("aca esta el team ");
-
         if (team == null) {
-            throw new NewExceptionType("No existe Team", HttpStatus.BAD_REQUEST);
+            throw new NewExceptionType("Team cannot be null", HttpStatus.BAD_REQUEST);
         }
-        if (team.getName() == null || team.getName().trim().isBlank()) {
-            throw new NewExceptionType("No existe nombre para el Team" , HttpStatus.BAD_REQUEST);
-        }
-        if (this.teamRepository.existsByName(team.getName())) {
-            throw new NewExceptionType("Ya existe un Team con ese nombre", HttpStatus.BAD_REQUEST);
-        }
+
         if (team.getPlayers() == null || team.getPlayers().isEmpty()) {
-            throw new NewExceptionType("No existen jugadores para el Team", HttpStatus.BAD_REQUEST);
+            throw new NewExceptionType("Players cannot be null or empty", HttpStatus.BAD_REQUEST);
         }
+
+        if (team.getName() == null || team.getName().trim().isBlank()) {
+            throw new NewExceptionType("Team name cannot be null", HttpStatus.BAD_REQUEST);
+        }
+
+        if (this.teamRepository.existsByName(team.getName())) {
+            throw new NewExceptionType("Team name already exists", HttpStatus.BAD_REQUEST);
+        }
+
         if (team.getTournament() == null || team.getTournament().getId() == null) {
-            throw new NewExceptionType("No existe torneo para el Team", HttpStatus.BAD_REQUEST);
+            throw new NewExceptionType("Tournament cannot be null", HttpStatus.BAD_REQUEST);
         }
 
-        Tournament  tournament = tournamentService.getById(team.getTournament().getId());
+        Tournament tournament = tournamentService.getById(team.getTournament().getId());
 
-        Inscription inscription = inscriptionRepository.findByTournamentId(tournament.getId()).orElseThrow(() -> new NewExceptionType("Inscripcion no disponible", HttpStatus.BAD_REQUEST));
+        Inscription inscription = inscriptionRepository.findByTournamentId(tournament.getId())
+                .orElseThrow(() -> new NewExceptionType("Inscription not available", HttpStatus.BAD_REQUEST));
 
         if (inscription.getClose_date() == null || inscription.getOpen_date() == null) {
-            throw new NewExceptionType("Inscripcion no disponible", HttpStatus.BAD_REQUEST);
+            throw new NewExceptionType("Inscription dates are not properly configured", HttpStatus.BAD_REQUEST);
         }
         if (inscription.getOpen_date().isAfter(LocalDateTime.now())) {
-            throw new NewExceptionType("Inscripcion no abierta", HttpStatus.BAD_REQUEST);
+            throw new NewExceptionType("Inscription period has not started yet", HttpStatus.BAD_REQUEST);
         }
-
         if (inscription.getClose_date().isBefore(LocalDateTime.now())) {
-            throw new NewExceptionType("Inscripciones cerradas", HttpStatus.BAD_REQUEST);
+            throw new NewExceptionType("Inscription period has already closed", HttpStatus.BAD_REQUEST);
         }
 
         if (team.getStatus() == null) {
@@ -129,52 +133,60 @@ public class TeamService implements TeamServiceInterface {
         }
 
         if (team.getCaptain() == null || team.getCaptain().trim().isBlank()) {
-            throw new NewExceptionType("No se ingreso el Capitan", HttpStatus.BAD_REQUEST);
+            throw new NewExceptionType("Captain cannot be null", HttpStatus.BAD_REQUEST);
         }
 
-       
         Status fullStatus = statusService.getById(team.getStatus().getId());
         team.setStatus(fullStatus);
 
-        List<String> carnets = team.getPlayers()
-                .stream()
-                .map(player -> player.getCarnet())
-                .collect(Collectors.toList());
-        List<String> repeated = duplicateData.duplicate(carnets);
-
-        if (!repeated.isEmpty()) {
-            throw new NewExceptionType("No se puede ingresar carnets duplicados: " + repeated, HttpStatus.BAD_REQUEST);
-        }
-
-        for (Player player : team.getPlayers()) {
+        List<Player> savedPlayers = team.getPlayers().stream().map(player -> {
 
             if (player.getNames() == null || player.getNames().trim().isBlank()) {
-                throw new NewExceptionType("No se ingreso nombre para el jugador con carnet: " + player.getCarnet(), HttpStatus.BAD_REQUEST);
+                throw new NewExceptionType("Name is missing for the player with student ID: " + player.getCarnet(), HttpStatus.BAD_REQUEST);
             }
-
-            if (player.getAge() <= 0 || player.getAge() > 100) {
-                throw new NewExceptionType("La edad no es correcta para el jugador " + player.getNames(), HttpStatus.BAD_REQUEST);
+            if (player.getAge() <= 15 || player.getAge() > 100) {
+                throw new NewExceptionType("Invalid age for player " + player.getNames(), HttpStatus.BAD_REQUEST);
             }
-
             if (player.getCarnet() == null || player.getCarnet().trim().isBlank()) {
-                throw new NewExceptionType("No se ingreso carnet para el jugador " + player.getNames(), HttpStatus.BAD_REQUEST);
+                throw new NewExceptionType("Student ID (carnet) is missing for player " + player.getNames(), HttpStatus.BAD_REQUEST);
             }
-
             if (player.getPosition() == null || player.getPosition().getId() == null) {
-                throw new NewExceptionType("No se ingreso posicion para el jugador " + player.getNames(), HttpStatus.BAD_REQUEST);
+                throw new NewExceptionType("Position is missing for player " + player.getNames(), HttpStatus.BAD_REQUEST);
             }
             if (!this.playerPositionRepository.existsById(player.getPosition().getId())) {
-                throw new NewExceptionType("No existe la posición  para el jugador " + player.getNames(), HttpStatus.BAD_REQUEST);
+                throw new NewExceptionType("Position does not exist for player " + player.getNames(), HttpStatus.BAD_REQUEST);
             }
-
 
             PlayerPosition fullPosition = playerPositionService.getById(player.getPosition().getId());
             player.setPosition(fullPosition);
-            player.setStatus(statusService.getById(1L));
-            player.setTeam(team);
-        }
+            player.setStatus(statusService.getById(2L));
+
+            if (playerRepository.existsByCarnet(player.getCarnet())) {
+                List<Player> player1 = playerRepository.findByCarnet(player.getCarnet());
+                if (player1.size() > 0) {
+                    return player1.get(0);
+                }
+            }
+            return playerRepository.save(player);
+        }).collect(Collectors.toList());
+
+        team.setPlayers(savedPlayers);
+
+        List<TeamPlayer> teamPlayers = savedPlayers.stream().map(player -> {
+            TeamPlayer tp = new TeamPlayer();
+            tp.setPlayer(player);
+            tp.setTeam(team);
+            return tp;
+        }).collect(Collectors.toList());
+
+        team.setTeamPlayers(teamPlayers);
         team.setTournament(tournament);
-        return teamRepository.save(team);
+
+        Team savedTeam = teamRepository.save(team);
+        savedTeam.getTeamPlayers().forEach(tp -> {
+            tp.getPlayer().getCarnet();
+        });
+        return savedTeam;
     }
 
     @Override
@@ -201,7 +213,7 @@ public class TeamService implements TeamServiceInterface {
     @Transactional
     public List<Team> getAll() {
         List<Team> teams = teamRepository.findAll();
-        teams.forEach(team -> team.getPlayers().size());
+        teams.forEach(team -> team.getTeamPlayers().size());
         return teamRepository.findAll();
     }
 }

@@ -42,7 +42,6 @@ public class PlayerService implements PlayerServiceInterface {
         existingPlayer.setAge(player.getAge());
         existingPlayer.setCarnet(player.getCarnet());
         existingPlayer.setPosition(player.getPosition());
-        existingPlayer.setTeam(player.getTeam());
         existingPlayer.setStatus(status);
 
         return playerRepository.save(existingPlayer);
@@ -61,8 +60,10 @@ public class PlayerService implements PlayerServiceInterface {
         return playerRepository.findAll();
     }
 
+    // pendiente realizar de manrea correcta la consulta
     @Override
     public List<Player> findByTeamId(Long teamId) {
-        return playerRepository.getByTeam(teamId);
+        //return playerRepository.getByTeam(teamId);
+        return null;
     }
 }
