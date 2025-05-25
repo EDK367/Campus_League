@@ -44,6 +44,16 @@ public class Tournament {
     @Column(name = "min_team_members", nullable = false)
     private int min_team_members;
 
+    @Column(name = "inscriptions_open_date", nullable = false)
+    private LocalDateTime inscriptions_open_date;
+
+    @Column(name = "inscriptions_close_date", nullable = false)
+    private LocalDateTime inscriptions_close_date;
+
+    @ManyToOne
+    @JoinColumn(name = "creator_user_id", nullable = false)
+    private User user;
+
     @ManyToOne
     @JoinColumn(name = "status_id", nullable = false)
     private Status status;
