@@ -63,4 +63,7 @@ public class Team {
     @JoinColumn(name = "tournament_id", nullable = false)
     private Tournament tournament;
 
+    @Column(name = "team_code", nullable = true, unique = true)
+    private String teamCode;
+
 }

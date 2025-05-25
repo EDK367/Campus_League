@@ -9,6 +9,7 @@ import com.umesdnd.CampusLeague.repository.PlayerRepository;
 import com.umesdnd.CampusLeague.repository.TeamRepository;
 import com.umesdnd.CampusLeague.service.interfaces.TeamServiceInterface;
 import com.umesdnd.CampusLeague.utills.DuplicateData;
+import com.umesdnd.CampusLeague.utills.TeamCode;
 import org.springdoc.webmvc.ui.SwaggerIndexTransformer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -54,7 +55,6 @@ public class TeamService implements TeamServiceInterface {
 
     @Autowired
     private PlayerPositionService playerPositionService;
-
 
     @Transactional
     public TeamDTO getWithPlayers(Long id) {
@@ -170,6 +170,14 @@ public class TeamService implements TeamServiceInterface {
             return playerRepository.save(player);
         }).collect(Collectors.toList());
 
+        if ( savedPlayers.size() > tournament.getMax_team_members()) {
+            throw new NewExceptionType("The team exceeds the maximum number of players allowed", HttpStatus.BAD_REQUEST);
+        }
+
+        if (savedPlayers.size() < tournament.getMin_team_members()) {
+            throw new NewExceptionType("The team does not meet the minimum number of players required", HttpStatus.BAD_REQUEST);
+        }
+
         team.setPlayers(savedPlayers);
 
         List<TeamPlayer> teamPlayers = savedPlayers.stream().map(player -> {
@@ -182,10 +190,18 @@ public class TeamService implements TeamServiceInterface {
         team.setTeamPlayers(teamPlayers);
         team.setTournament(tournament);
 
+        TeamCode teamCode = new TeamCode();
+        String code = teamCode.generateTeamCode(tournament.getTournament_name());
+        while (teamRepository.existsByTeamCode(code)) {
+            code = teamCode.generateTeamCode(tournament.getTournament_name());
+        }
+        team.setTeamCode(code);
+
         Team savedTeam = teamRepository.save(team);
         savedTeam.getTeamPlayers().forEach(tp -> {
             tp.getPlayer().getCarnet();
         });
+
         return savedTeam;
     }
 
@@ -216,4 +232,5 @@ public class TeamService implements TeamServiceInterface {
         teams.forEach(team -> team.getTeamPlayers().size());
         return teamRepository.findAll();
     }
+
 }
