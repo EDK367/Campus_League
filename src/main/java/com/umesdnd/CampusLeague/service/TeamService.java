@@ -3,7 +3,6 @@ package com.umesdnd.CampusLeague.service;
 import com.umesdnd.CampusLeague.exception.NewExceptionType;
 import com.umesdnd.CampusLeague.model.*;
 import com.umesdnd.CampusLeague.model.DTO.TeamDTO;
-import com.umesdnd.CampusLeague.repository.InscriptionRepository;
 import com.umesdnd.CampusLeague.repository.PlayerPositionRepository;
 import com.umesdnd.CampusLeague.repository.PlayerRepository;
 import com.umesdnd.CampusLeague.repository.TeamRepository;
@@ -33,9 +32,6 @@ public class TeamService implements TeamServiceInterface {
 
     @Autowired
     private PlayerRepository playerRepository;
-
-    @Autowired
-    private InscriptionRepository inscriptionRepository;
 
     @Autowired
     private CoachService coachService;
@@ -109,16 +105,13 @@ public class TeamService implements TeamServiceInterface {
 
         Tournament tournament = tournamentService.getById(team.getTournament().getId());
 
-        Inscription inscription = inscriptionRepository.findByTournamentId(tournament.getId())
-                .orElseThrow(() -> new NewExceptionType("Inscription not available", HttpStatus.BAD_REQUEST));
-
-        if (inscription.getClose_date() == null || inscription.getOpen_date() == null) {
+        if (tournament.getInscriptions_open_date() == null || tournament.getInscriptions_close_date() == null) {
             throw new NewExceptionType("Inscription dates are not properly configured", HttpStatus.BAD_REQUEST);
         }
-        if (inscription.getOpen_date().isAfter(LocalDateTime.now())) {
+        if (tournament.getInscriptions_open_date().isAfter(LocalDateTime.now())) {
             throw new NewExceptionType("Inscription period has not started yet", HttpStatus.BAD_REQUEST);
         }
-        if (inscription.getClose_date().isBefore(LocalDateTime.now())) {
+        if (tournament.getInscriptions_close_date().isBefore(LocalDateTime.now())) {
             throw new NewExceptionType("Inscription period has already closed", HttpStatus.BAD_REQUEST);
         }
 
