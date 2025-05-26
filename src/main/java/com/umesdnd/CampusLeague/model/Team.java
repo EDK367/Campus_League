@@ -35,6 +35,15 @@ public class Team {
     @Column(name = "approved_date", nullable = true, updatable = false)
     private LocalDateTime approved_date;
 
+    @Column(name = "contact_email", nullable = false, unique = true)
+    private String contact_email;
+
+    @Column(name = "contact_phone", nullable = false, unique = true)
+    private String contact_phone;
+
+    //@Column(name = "logo", nullable = true, updatable = false)
+    //private String logo;
+
     @ManyToOne
     @JoinColumn(name = "approved_by", nullable = true)
     private User user;

@@ -1,7 +1,7 @@
 -- Insert into statuses
 INSERT INTO statuses (id, status_name) VALUES 
 (1, 'Activo'),
-(2, 'Desactivado'),
+(2, 'En Revision'),
 (3, 'Autorizado'),
 (4, 'Disponible'),
 (5, 'Aceptado'),

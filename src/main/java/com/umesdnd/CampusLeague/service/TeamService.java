@@ -72,6 +72,8 @@ public class TeamService implements TeamServiceInterface {
                 .captain(team.getCaptain())
                 .tournament(team.getTournament())
                 .teamCode(team.getTeamCode())
+                .contact_email(team.getContact_email())
+                .contact_phone(team.getContact_phone())
                 .build();
 
         return teamDTO;

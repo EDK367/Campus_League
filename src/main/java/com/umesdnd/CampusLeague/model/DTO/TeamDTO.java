@@ -26,5 +26,7 @@ public class TeamDTO {
     private String captain;
     private Tournament tournament;
     private String teamCode;
+    private String contact_phone;
+    private String contact_email;
 
 }
