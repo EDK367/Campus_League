@@ -49,10 +49,9 @@ public class PlayerService implements PlayerServiceInterface {
 
     @Override
     public void delete(Long id) {
-        if (!playerRepository.existsById(id)) {
-            throw new RuntimeException("Player with ID " + id + " not found");
-        }
-        playerRepository.deleteById(id);
+        Player player = playerRepository.findById(id).orElseThrow(() -> new NewExceptionType("Player with ID \" + id + \" not found", HttpStatus.NOT_FOUND));
+        player.setStatus(statusService.getById(2L));
+        playerRepository.save(player);
     }
 
     @Override

@@ -69,6 +69,9 @@ public class TeamService implements TeamServiceInterface {
                 .status(team.getStatus())
                 .coach(team.getCoach())
                 .players(players)
+                .captain(team.getCaptain())
+                .tournament(team.getTournament())
+                .teamCode(team.getTeamCode())
                 .build();
 
         return teamDTO;

@@ -1,9 +1,6 @@
 package com.umesdnd.CampusLeague.model.DTO;
 
-import com.umesdnd.CampusLeague.model.Coach;
-import com.umesdnd.CampusLeague.model.Player;
-import com.umesdnd.CampusLeague.model.Status;
-import com.umesdnd.CampusLeague.model.User;
+import com.umesdnd.CampusLeague.model.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -26,5 +23,8 @@ public class TeamDTO {
     private Status status;
     private Coach coach;
     private List<Player> players;
+    private String captain;
+    private Tournament tournament;
+    private String teamCode;
 
 }
