@@ -46,8 +46,9 @@ public class RefereeService implements RefereeServiceInterface {
     public Referee update(Long id, Referee referee) {
         Referee existingReferee = refereeRepository.findById(id).orElseThrow(() -> new NewExceptionType("Referee not found", HttpStatus.NOT_FOUND));
 
-        if (existingReferee.getStatus().getId() != 1) {
-            throw new NewExceptionType("Referee is not active", HttpStatus.BAD_REQUEST);
+
+        if (referee.getStatus() != null) {
+            existingReferee.setStatus(referee.getStatus());
         }
 
         if (referee.getExperience_years() != null) {

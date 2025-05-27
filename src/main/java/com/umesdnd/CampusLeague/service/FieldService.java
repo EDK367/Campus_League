@@ -73,9 +73,11 @@ public class FieldService implements FieldServiceInterface {
             if (!statusRepository.findById(field.getStatus().getId()).isPresent()) {
                 throw new NewExceptionType("Status not found for Field", HttpStatus.BAD_REQUEST);
             }
+            /*
             if (existingField.getStatus().getId() == 2) {
                 throw new NewExceptionType("Field cannot be uppdate", HttpStatus.BAD_REQUEST);
             }
+             */
             existingField.setStatus(statusService.getById(field.getStatus().getId()));
         }
 

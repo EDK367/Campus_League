@@ -6,4 +6,5 @@ import com.umesdnd.CampusLeague.service.interfaces.common.CrudServiceInterface;
 
 public interface TeamServiceInterface extends CrudServiceInterface<Team> {
     TeamDTO getWithPlayers(Long id);
+    Team activeTeam(Long id);
 }

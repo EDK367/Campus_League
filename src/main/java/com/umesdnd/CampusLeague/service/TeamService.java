@@ -29,9 +29,6 @@ public class TeamService implements TeamServiceInterface {
     private TournamentService tournamentService;
 
     @Autowired
-    private PlayerService playerService;
-
-    @Autowired
     private PlayerRepository playerRepository;
 
     @Autowired
@@ -77,6 +74,18 @@ public class TeamService implements TeamServiceInterface {
                 .build();
 
         return teamDTO;
+    }
+
+    @Override
+    public Team activeTeam(Long id) {
+        Team team = teamRepository.findById(id).orElseThrow(() -> new NewExceptionType("Team not found with id " + id, HttpStatus.NOT_FOUND));
+        if (team.getStatus() != null) {
+            if (team.getStatus().getId() == 5L) {
+                throw new NewExceptionType("Team is already active", HttpStatus.BAD_REQUEST);
+            }
+        }
+        team.setStatus(statusService.getById(5L));
+        return teamRepository.save(team);
     }
 
     @Transactional

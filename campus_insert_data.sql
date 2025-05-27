@@ -1,7 +1,5 @@
 -- Insert into statuses
-INSERT INTO statuses (id, status_name) VALUES 
-(1, 'Activo'),
-(2, 'En Revision'),
+INSERT INTO statuses (id, status_name) VALUES
 (3, 'Autorizado'),
 (4, 'Disponible'),
 (5, 'Aceptado'),
@@ -27,7 +25,6 @@ INSERT INTO statuses (id, status_name) VALUES
 
 -- Insert into sports
 INSERT INTO sports (id, name) VALUES
-(1, 'Fútbol'),
 (2, 'Béisbol'),
 (3, 'Básquetbol'),
 (4, 'Voleibol'),
@@ -138,27 +135,27 @@ INSERT INTO player_positions (id, name, description, sport_id) VALUES
 
 -- DEFAUL USER admin : admin
 INSERT INTO users (id, email, password, username, status_id) 
-VALUES (1, 'admin@example.com', '$2a$10$qUhJ49kWObZmZMrwyLkLKO51NSABu9zuQoqyNlJWcFmnwpIZDNzMO', 'admin', 1);
+VALUES (1, 'admin@example.com', '$2a$10$qUhJ49kWObZmZMrwyLkLKO51NSABu9zuQoqyNlJWcFmnwpIZDNzMO', 'EDK', 1);
 
 -- Insert example tournament
 INSERT INTO tournaments (
-    id, name, description, start_date, end_date, inscriptions_open_date, inscriptions_close_date,
+    name, description, start_date, end_date, inscriptions_open_date, inscriptions_close_date,
     min_team_members, max_team_members, sport_id, status_id, creator_user_id
 ) VALUES 
 -- Tournament 1: Fútbol
-(1, 'Torneo de Fútbol Interuniversitario', 'Torneo anual de fútbol para universidades',
+('Torneo de Fútbol Interuniversitario', 'Torneo anual de fútbol para universidades',
  '2025-06-01 10:00:00', '2025-07-01 18:00:00',
  '2025-05-01 08:00:00', '2025-05-20 23:59:00',
  7, 11, 1, 9, 1),
 
 -- Tournament 2: Básquetbol
-(2, 'Copa Nacional de Básquetbol Sub-21', 'Competencia nacional de equipos juveniles',
+('Copa Nacional de Básquetbol Sub-21', 'Competencia nacional de equipos juveniles',
  '2025-07-15 09:00:00', '2025-08-10 20:00:00',
  '2025-06-01 00:00:00', '2025-07-01 23:59:00',
  5, 12, 3, 9, 1),
 
 -- Tournament 3: Voleibol Playa Mixto
-(3, 'Torneo de Voleibol Playa Mixto', 'Competencia mixta de voleibol en la playa',
+('Torneo de Voleibol Playa Mixto', 'Competencia mixta de voleibol en la playa',
  '2025-08-05 08:00:00', '2025-08-15 18:00:00',
  '2025-07-01 00:00:00', '2025-07-25 23:59:00',
  2, 4, 4, 9, 1);
