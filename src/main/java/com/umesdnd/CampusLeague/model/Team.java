@@ -57,7 +57,7 @@ public class Team {
     private Coach coach;
 
     @OneToMany(mappedBy = "team", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference(value = "team-teamPlayers")
+    //@JsonManagedReference(value = "team-teamPlayers")
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private List<TeamPlayer> teamPlayers;
 

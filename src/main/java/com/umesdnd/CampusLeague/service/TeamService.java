@@ -6,6 +6,8 @@ import com.umesdnd.CampusLeague.model.DTO.TeamDTO;
 import com.umesdnd.CampusLeague.repository.PlayerPositionRepository;
 import com.umesdnd.CampusLeague.repository.PlayerRepository;
 import com.umesdnd.CampusLeague.repository.TeamRepository;
+import com.umesdnd.CampusLeague.service.interfaces.PlayerPositionServiceInterface;
+import com.umesdnd.CampusLeague.service.interfaces.TeamPlayerServiceInterface;
 import com.umesdnd.CampusLeague.service.interfaces.TeamServiceInterface;
 import com.umesdnd.CampusLeague.utills.DuplicateData;
 import com.umesdnd.CampusLeague.utills.TeamCode;
@@ -24,6 +26,9 @@ public class TeamService implements TeamServiceInterface {
 
     @Autowired
     private TeamRepository teamRepository;
+
+    @Autowired
+    private TeamPlayerServiceInterface teamPlayerService;
 
     @Autowired
     private TournamentService tournamentService;
@@ -86,6 +91,12 @@ public class TeamService implements TeamServiceInterface {
         }
         team.setStatus(statusService.getById(5L));
         return teamRepository.save(team);
+    }
+
+    @Override
+    public List<TeamPlayer> positionTeam(Long id) {
+        List<TeamPlayer> teamPlayers = teamPlayerService.positionTeam(id);
+        return teamPlayers;
     }
 
     @Transactional
@@ -151,7 +162,7 @@ public class TeamService implements TeamServiceInterface {
             if (player.getNames() == null || player.getNames().trim().isBlank()) {
                 throw new NewExceptionType("Name is missing for the player with student ID: " + player.getCarnet(), HttpStatus.BAD_REQUEST);
             }
-            if (player.getAge() <= 15 || player.getAge() > 100) {
+            if (player.getAge() <= 15 || player.getAge() > 75) {
                 throw new NewExceptionType("Invalid age for player " + player.getNames(), HttpStatus.BAD_REQUEST);
             }
             if (player.getCarnet() == null || player.getCarnet().trim().isBlank()) {
@@ -177,7 +188,7 @@ public class TeamService implements TeamServiceInterface {
             return playerRepository.save(player);
         }).collect(Collectors.toList());
 
-        if ( savedPlayers.size() > tournament.getMax_team_members()) {
+        if (savedPlayers.size() > tournament.getMax_team_members()) {
             throw new NewExceptionType("The team exceeds the maximum number of players allowed", HttpStatus.BAD_REQUEST);
         }
 
@@ -191,6 +202,7 @@ public class TeamService implements TeamServiceInterface {
             TeamPlayer tp = new TeamPlayer();
             tp.setPlayer(player);
             tp.setTeam(team);
+            tp.setPlayerPosition(player.getPosition());
             return tp;
         }).collect(Collectors.toList());
 

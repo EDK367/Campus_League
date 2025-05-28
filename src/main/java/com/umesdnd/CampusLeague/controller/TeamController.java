@@ -24,6 +24,12 @@ public class TeamController {
             return new ResponseEntity<>(team, HttpStatus.OK);
     }
 
+    @GetMapping("/jugadores/{id}")
+    public ResponseEntity<List> getTeamPlayers(@PathVariable Long id) {
+        List teamPlayers = teamService.positionTeam(id);
+        return new ResponseEntity<>(teamPlayers, HttpStatus.OK);
+    }
+
     @PutMapping("/aceptado/{id}")
     public ResponseEntity<Team> activateTeam(@PathVariable Long id) {
         Team team = teamService.activeTeam(id);
@@ -51,7 +57,6 @@ public class TeamController {
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
     }
-
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTeam(@PathVariable Long id) {
         try {

@@ -23,12 +23,16 @@ public class TeamPlayer {
 
     @ManyToOne
     @JoinColumn(name = "team_id", nullable = false)
-    @JsonBackReference(value = "team-teamPlayers")
+    //@JsonBackReference(value = "team-teamPlayers")
     private Team team;
 
     @ManyToOne
     @JoinColumn(name = "player_id", nullable = false)
-    @JsonBackReference(value = "player-teamPlayers")
+    //@JsonBackReference(value = "player-teamPlayers")
     private Player player;
+
+    @ManyToOne
+    @JoinColumn(name = "player_position_id", nullable = true)
+    private PlayerPosition playerPosition;
 
 }
