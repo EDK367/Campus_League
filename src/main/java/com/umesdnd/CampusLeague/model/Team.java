@@ -32,13 +32,13 @@ public class Team {
     @Column(name = "inscription_date", columnDefinition = "DATETIME(6) DEFAULT CURRENT_TIMESTAMP(6)", nullable = true, updatable = false)
     private LocalDateTime inscription_date;
 
-    @Column(name = "approved_date", nullable = true, updatable = false)
+    @Column(name = "approved_date", nullable = true)
     private LocalDateTime approved_date;
 
-    @Column(name = "contact_email", nullable = false, unique = true)
+    @Column(name = "contact_email", nullable = false, unique = false)
     private String contact_email;
 
-    @Column(name = "contact_phone", nullable = false, unique = true)
+    @Column(name = "contact_phone", nullable = false, unique = false)
     private String contact_phone;
 
     //@Column(name = "logo", nullable = true, updatable = false)

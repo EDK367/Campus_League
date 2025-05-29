@@ -5,6 +5,7 @@ import com.umesdnd.CampusLeague.model.*;
 import com.umesdnd.CampusLeague.model.DTO.TeamDTO;
 import com.umesdnd.CampusLeague.repository.PlayerPositionRepository;
 import com.umesdnd.CampusLeague.repository.PlayerRepository;
+import com.umesdnd.CampusLeague.repository.TeamPlayerRepository;
 import com.umesdnd.CampusLeague.repository.TeamRepository;
 import com.umesdnd.CampusLeague.service.interfaces.PlayerPositionServiceInterface;
 import com.umesdnd.CampusLeague.service.interfaces.TeamPlayerServiceInterface;
@@ -29,6 +30,9 @@ public class TeamService implements TeamServiceInterface {
 
     @Autowired
     private TeamPlayerServiceInterface teamPlayerService;
+
+    @Autowired
+    private TeamPlayerRepository  teamPlayerRepository;
 
     @Autowired
     private TournamentService tournamentService;
@@ -82,6 +86,7 @@ public class TeamService implements TeamServiceInterface {
     }
 
     @Override
+    @Transactional
     public Team activeTeam(Long id) {
         Team team = teamRepository.findById(id).orElseThrow(() -> new NewExceptionType("Team not found with id " + id, HttpStatus.NOT_FOUND));
         if (team.getStatus() != null) {
@@ -89,7 +94,9 @@ public class TeamService implements TeamServiceInterface {
                 throw new NewExceptionType("Team is already active", HttpStatus.BAD_REQUEST);
             }
         }
+        team.setApproved_date(LocalDateTime.now());
         team.setStatus(statusService.getById(5L));
+        System.out.println(team.getApproved_date());
         return teamRepository.save(team);
     }
 
@@ -181,6 +188,13 @@ public class TeamService implements TeamServiceInterface {
 
             if (playerRepository.existsByCarnet(player.getCarnet())) {
                 List<Player> player1 = playerRepository.findByCarnet(player.getCarnet());
+                List<Team> teamsTournament = teamRepository.findByTournamentId(tournament.getId());
+                for (Team team1 : teamsTournament) {
+                    System.out.println(team1.getId() + " " + player1.get(0).getId());
+                    if (teamPlayerRepository.existsByTeamIdAndPlayerId(team1.getId(), player1.get(0).getId())) {
+                        throw new NewExceptionType("El jugador " + player.getNames() + " ya participa en este torneo", HttpStatus.BAD_REQUEST);
+                    }
+                }
                 if (player1.size() > 0) {
                     return player1.get(0);
                 }
