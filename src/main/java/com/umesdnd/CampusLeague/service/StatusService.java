@@ -17,7 +17,7 @@ public class StatusService implements StatusServiceInterface {
 
     @Override
     public Status getById(Long id) {
-        return statusRepository.findById(id).orElseThrow(() -> new RuntimeException("Status not found"));
+        return statusRepository.findById(id).orElseThrow(() -> new RuntimeException("Estado no encontrado"));
     }
 
     @Override
@@ -36,7 +36,7 @@ public class StatusService implements StatusServiceInterface {
 
     @Override
     public void delete(Long id) {
-        Status status = statusRepository.findById(id).orElseThrow(() -> new RuntimeException("Team not found with id " + id));
+        Status status = statusRepository.findById(id).orElseThrow(() -> new RuntimeException("Equipo no encontrado con id " + id));
         statusRepository.delete(status);
     }
 

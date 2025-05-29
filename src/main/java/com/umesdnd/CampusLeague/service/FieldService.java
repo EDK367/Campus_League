@@ -25,22 +25,22 @@ public class FieldService implements FieldServiceInterface {
 
     @Override
     public Field getById(Long id) {
-        return fieldRepository.findById(id).orElseThrow(() -> new NewExceptionType("Field not found", HttpStatus.NOT_FOUND));
+        return fieldRepository.findById(id).orElseThrow(() -> new NewExceptionType("Campo no encontrado", HttpStatus.NOT_FOUND));
     }
 
     @Override
     public Field saveOne(Field field) {
         if (field.getName() == null || field.getName().isBlank()) {
-            throw new NewExceptionType("Field name is required", HttpStatus.BAD_REQUEST);
+            throw new NewExceptionType("El nombre del campo es obligatorio", HttpStatus.BAD_REQUEST);
         }
         if (field.getLocation() == null || field.getLocation().isBlank()) {
-            throw new NewExceptionType("Field location is required", HttpStatus.BAD_REQUEST);
+            throw new NewExceptionType("Se requiere la ubicacion del campo", HttpStatus.BAD_REQUEST);
         }
         if (field.getCapacity() == null || field.getCapacity() <= 0) {
-            throw new NewExceptionType("Field capacity must be greater than 0", HttpStatus.BAD_REQUEST);
+            throw new NewExceptionType("La capacidad del campo debe de ser mayor a 0", HttpStatus.BAD_REQUEST);
         }
         if (fieldRepository.findByName(field.getName()).isPresent()) {
-            throw new NewExceptionType("Field name already exists", HttpStatus.BAD_REQUEST);
+            throw new NewExceptionType("El nombre del campo ya existe", HttpStatus.BAD_REQUEST);
         }
 
         field.setStatus(statusService.getById(1L));
@@ -49,29 +49,29 @@ public class FieldService implements FieldServiceInterface {
 
     @Override
     public Field update(Long id, Field field) {
-        Field existingField = fieldRepository.findById(id).orElseThrow(() -> new NewExceptionType("Field not found", HttpStatus.NOT_FOUND));
+        Field existingField = fieldRepository.findById(id).orElseThrow(() -> new NewExceptionType("Campo no encontrado", HttpStatus.NOT_FOUND));
 
         if (fieldRepository.existsByNameAndIdNot(field.getName(), id)) {
-            throw new NewExceptionType("Field name already exists", HttpStatus.BAD_REQUEST);
+            throw new NewExceptionType("El nombre del campo ya existe", HttpStatus.BAD_REQUEST);
         }
         if (field.getName() != null && field.getName().isBlank()) {
-            throw new NewExceptionType("Field name cannot be empty", HttpStatus.BAD_REQUEST);
+            throw new NewExceptionType("El nombre del campo no puede estar vacio", HttpStatus.BAD_REQUEST);
         }
 
         if (field.getLocation() != null && field.getLocation().isBlank()) {
-            throw new NewExceptionType("Field location cannot be empty", HttpStatus.BAD_REQUEST);
+            throw new NewExceptionType("La ubicacion del campo no puede estar vacia", HttpStatus.BAD_REQUEST);
         }
 
         if (field.getCapacity() != null && field.getCapacity() <= 0) {
-            throw new NewExceptionType("Field capacity must be greater than 0", HttpStatus.BAD_REQUEST);
+            throw new NewExceptionType("La capacidad del campo debe ser mayor que 0", HttpStatus.BAD_REQUEST);
         }
 
         if (field.getStatus() != null) {
             if (field.getStatus().getId() == null) {
-                throw new NewExceptionType("Status id is required", HttpStatus.BAD_REQUEST);
+                throw new NewExceptionType("Se requiere el id del estado", HttpStatus.BAD_REQUEST);
             }
             if (!statusRepository.findById(field.getStatus().getId()).isPresent()) {
-                throw new NewExceptionType("Status not found for Field", HttpStatus.BAD_REQUEST);
+                throw new NewExceptionType("Estado no encontrado para el campo", HttpStatus.BAD_REQUEST);
             }
             /*
             if (existingField.getStatus().getId() == 2) {
@@ -96,7 +96,7 @@ public class FieldService implements FieldServiceInterface {
 
     @Override
     public void delete(Long id) {
-        Field existingField = fieldRepository.findById(id).orElseThrow(() -> new NewExceptionType("Field not found", HttpStatus.NOT_FOUND));
+        Field existingField = fieldRepository.findById(id).orElseThrow(() -> new NewExceptionType("Campo no encontrado", HttpStatus.NOT_FOUND));
         existingField.setStatus(statusService.getById(2L));
         fieldRepository.save(existingField);
     }

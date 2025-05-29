@@ -18,7 +18,7 @@ public class SanctionService implements SanctionServiceInterface {
 
     @Override
     public Sanction getById(Long id) {
-        return sanctionRepository.findById(id).orElseThrow(() -> new NewExceptionType("Sanction not found", HttpStatus.NOT_FOUND));
+        return sanctionRepository.findById(id).orElseThrow(() -> new NewExceptionType("Sancion no encontrada", HttpStatus.NOT_FOUND));
     }
 
     @Override

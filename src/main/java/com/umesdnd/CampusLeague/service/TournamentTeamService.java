@@ -36,49 +36,49 @@ public class TournamentTeamService implements TournamentTeamServiceInterface {
     @Override
     public TournamentTeam getById(Long id) {
         return tournamentTRepository.findById(id).orElseThrow(
-                () -> new NewExceptionType("Tournament Team not found", HttpStatus.NOT_FOUND));
+                () -> new NewExceptionType("Equipo del torneo no encontrado", HttpStatus.NOT_FOUND));
     }
 
     @Transactional
     public TournamentTeam saveOne(TournamentTeam tournamentTeam) {
         System.out.println("aca esta torneo" + tournamentTeam);
         if (tournamentTeam == null) {
-            throw new NewExceptionType("Tournament team cannot be null", HttpStatus.BAD_REQUEST);
+            throw new NewExceptionType("El equipo del torneo no puede ser nulo", HttpStatus.BAD_REQUEST);
         }
         if (tournamentTeam.getPoints() == null) {
             tournamentTeam.setPoints(0L);
         }
         if (tournamentTeam.getTournament() == null) {
-            throw new NewExceptionType("Tournament cannot be null", HttpStatus.BAD_REQUEST);
+            throw new NewExceptionType("El torneo no puede ser nulo", HttpStatus.BAD_REQUEST);
         }
         if (tournamentTeam.getTeam() == null) {
-            throw new NewExceptionType("Team cannot be null", HttpStatus.BAD_REQUEST);
+            throw new NewExceptionType("El equipo no puede ser nulo", HttpStatus.BAD_REQUEST);
         }
         if (tournamentTeam.getGroup() == null) {
-            throw new NewExceptionType("Group cannot be null", HttpStatus.BAD_REQUEST);
+            throw new NewExceptionType("El grupo no puede ser nulo", HttpStatus.BAD_REQUEST);
         }
         if (tournamentTeam.getTournament().getId() == null) {
-               throw new NewExceptionType("Tournament cannot be null", HttpStatus.BAD_REQUEST);
+               throw new NewExceptionType("El tornoe no puede ser nulo", HttpStatus.BAD_REQUEST);
         }
         Tournament tournament = tournamentService.getById(tournamentTeam.getTournament().getId());
         tournamentTeam.setTournament(tournament);
         if (tournamentTeam.getTeam().getId() == null) {
-            throw new NewExceptionType("Team cannot be null", HttpStatus.BAD_REQUEST);
+            throw new NewExceptionType("El equipo no puede ser nulo", HttpStatus.BAD_REQUEST);
         }
         Team team = teamService.getById(tournamentTeam.getTeam().getId());
         team.setStatus(statusService.getById(1L));
         tournamentTeam.setTeam(team);
         if (tournamentTeam.getGroup().getId() == null) {
-            throw new NewExceptionType("Group cannot be null", HttpStatus.BAD_REQUEST);
+            throw new NewExceptionType("El grupo no puede ser nulo", HttpStatus.BAD_REQUEST);
         }
         TournamentGroup group = tournamentGroupService.getById(tournamentTeam.getGroup().getId());
         tournamentTeam.setGroup(group);
         if (tournament.getEnd_date().isBefore(LocalDateTime.now())) {
-            throw new NewExceptionType("Tournament has already ended", HttpStatus.BAD_REQUEST);
+            throw new NewExceptionType("El torneo ya ha terminado", HttpStatus.BAD_REQUEST);
         }
 
        /* if (team.getPlayers().size() > tournament.getMax_team_members() || team.getPlayers().size() < tournament.getMin_team_members()) {
-            throw new NewExceptionType("Team is not valid", HttpStatus.BAD_REQUEST);
+            throw new NewExceptionType("El equipo no es valido", HttpStatus.BAD_REQUEST);
         }
         */
 

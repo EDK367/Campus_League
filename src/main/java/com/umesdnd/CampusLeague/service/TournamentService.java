@@ -18,7 +18,7 @@ public class TournamentService implements TournamentServiceInterface{
 
     @Override
     public Tournament getById(Long id) {
-        return tournamentRepository.findById(id).orElseThrow(() -> new NewExceptionType("Tournament not found", HttpStatus.NOT_FOUND));
+        return tournamentRepository.findById(id).orElseThrow(() -> new NewExceptionType("Torneo no encontrado", HttpStatus.NOT_FOUND));
     }
 
     @Override
@@ -26,7 +26,7 @@ public class TournamentService implements TournamentServiceInterface{
 
     @Override
     public Tournament update(Long id, Tournament tournament) {
-        Tournament existingTournament = tournamentRepository.findById(id).orElseThrow(() -> new RuntimeException("Tournament not found"));
+        Tournament existingTournament = tournamentRepository.findById(id).orElseThrow(() -> new RuntimeException("Torneo no encontrado"));
 
         existingTournament.setTournament_name(tournament.getTournament_name());
         existingTournament.setSport(tournament.getSport());
@@ -43,7 +43,7 @@ public class TournamentService implements TournamentServiceInterface{
     @Override
     public void delete(Long id) {
         if (!tournamentRepository.existsById(id)){
-            throw new RuntimeException("Tournament with ID " + id + " not found");
+            throw new RuntimeException("Torneo con ID " + id + " no encontrado");
         }
         tournamentRepository.deleteById(id);
     }

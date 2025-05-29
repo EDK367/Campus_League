@@ -18,18 +18,18 @@ public class SanctionTypeService implements SanctionTypeServiceInterface {
 
     @Override
     public SanctionType getById(Long id) {
-        return sanctionTypeRepository.findById(id).orElseThrow(() -> new NewExceptionType("Sanction type not found", HttpStatus.NOT_FOUND));
+        return sanctionTypeRepository.findById(id).orElseThrow(() -> new NewExceptionType("Tipo de sancion no encontrado", HttpStatus.NOT_FOUND));
     }
 
     @Override
     public SanctionType saveOne(SanctionType sanctionType) {
 
         if (sanctionTypeRepository.existsByTypeName(sanctionType.getType_name())) {
-            throw new NewExceptionType("Type name already exists", HttpStatus.BAD_REQUEST);
+            throw new NewExceptionType("El nombre del tipo ya existe", HttpStatus.BAD_REQUEST);
         }
 
         if (sanctionType.getType_name() == null || sanctionType.getType_name().isBlank()) {
-            throw new NewExceptionType("Type name cannot be empty", HttpStatus.BAD_REQUEST);
+            throw new NewExceptionType("El nombre del tipo no puede estar vacio", HttpStatus.BAD_REQUEST);
         }
 
         return sanctionTypeRepository.save(sanctionType);
@@ -37,13 +37,13 @@ public class SanctionTypeService implements SanctionTypeServiceInterface {
 
     @Override
     public SanctionType update(Long id, SanctionType sanctionType) {
-        SanctionType existingSanctionType = sanctionTypeRepository.findById(id).orElseThrow(() -> new NewExceptionType("Sanction type not found", HttpStatus.NOT_FOUND));
+        SanctionType existingSanctionType = sanctionTypeRepository.findById(id).orElseThrow(() -> new NewExceptionType("Tipo de sancion no encontrado", HttpStatus.NOT_FOUND));
 
         if (sanctionTypeRepository.existsByTypeName(sanctionType.getType_name())) {
-            throw new NewExceptionType("Type name already exists", HttpStatus.BAD_REQUEST);
+            throw new NewExceptionType("El nombre del tipo ya existe", HttpStatus.BAD_REQUEST);
         }
         if (sanctionType.getType_name() == null || sanctionType.getType_name().isBlank()) {
-            throw new NewExceptionType("Type name cannot be empty", HttpStatus.BAD_REQUEST);
+            throw new NewExceptionType("El nombre del tipo no puede estar vacio", HttpStatus.BAD_REQUEST);
         }
 
         existingSanctionType.setType_name(sanctionType.getType_name());
