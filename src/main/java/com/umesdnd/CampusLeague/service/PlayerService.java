@@ -23,7 +23,7 @@ public class PlayerService implements PlayerServiceInterface {
     @Override
     public Player getById(Long id) {
         return playerRepository.findById(id)
-                .orElseThrow(() -> new NewExceptionType("Player with ID " + id + " not found", HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new NewExceptionType("Jugador con ID " + id + " no encontrado", HttpStatus.NOT_FOUND));
     }
 
     @Override
@@ -34,7 +34,7 @@ public class PlayerService implements PlayerServiceInterface {
     @Override
     public Player update(Long id, Player player) {
         Player existingPlayer = playerRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Player with ID " + id + " not found"));
+                .orElseThrow(() -> new RuntimeException("Jugador con ID " + id + " no encontrado"));
 
         Status status = statusService.getById(player.getStatus().getId());
 
@@ -49,7 +49,7 @@ public class PlayerService implements PlayerServiceInterface {
 
     @Override
     public void delete(Long id) {
-        Player player = playerRepository.findById(id).orElseThrow(() -> new NewExceptionType("Player with ID \" + id + \" not found", HttpStatus.NOT_FOUND));
+        Player player = playerRepository.findById(id).orElseThrow(() -> new NewExceptionType("Jugador con ID \" + id + \" no encontrado", HttpStatus.NOT_FOUND));
         player.setStatus(statusService.getById(2L));
         playerRepository.save(player);
     }

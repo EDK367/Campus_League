@@ -19,16 +19,16 @@ public class TournamentGroupService implements TournamentGroupServiceInterface {
 
     @Override
     public TournamentGroup getById(Long id) {
-        return tournamentGRepository.findById(id).orElseThrow(() -> new NewExceptionType("Group not found", HttpStatus.NOT_FOUND));
+        return tournamentGRepository.findById(id).orElseThrow(() -> new NewExceptionType("Grupo no encontrado", HttpStatus.NOT_FOUND));
     }
 
     @Override
     public TournamentGroup saveOne(TournamentGroup tournamentGroup) {
         if (tournamentGroup.getName()  == null || tournamentGroup.getName().isBlank()) {
-            throw new NewExceptionType("Name is required", HttpStatus.BAD_REQUEST);
+            throw new NewExceptionType("El nombre es requerido", HttpStatus.BAD_REQUEST);
         }
         if (tournamentGRepository.findByName(tournamentGroup.getName()).isPresent()) {
-            throw new NewExceptionType("Name already exists", HttpStatus.BAD_REQUEST);
+            throw new NewExceptionType("El nombre ya existe", HttpStatus.BAD_REQUEST);
         }
         return tournamentGRepository.save(tournamentGroup);
     }
@@ -37,16 +37,16 @@ public class TournamentGroupService implements TournamentGroupServiceInterface {
     public TournamentGroup update(Long id, TournamentGroup tournamentGroup) {
         TournamentGroup existingTournamentGroup = getById(id);
         if (existingTournamentGroup == null) {
-            throw new NewExceptionType("TournamentGroup not found", HttpStatus.NOT_FOUND);
+            throw new NewExceptionType("Grupo de torneo no encontrado", HttpStatus.NOT_FOUND);
         }
         if (tournamentGroup.getName()  == null || tournamentGroup.getName().isBlank()) {
-            throw new NewExceptionType("Name is required", HttpStatus.BAD_REQUEST);
+            throw new NewExceptionType("Nombre es requerido", HttpStatus.BAD_REQUEST);
         }
 
         TournamentGroup existingTournamentGroupWithName = tournamentGRepository.findByName(tournamentGroup.getName()).orElse(null);
         if (existingTournamentGroupWithName != null) {
             if (existingTournamentGroupWithName.getId() != id) {
-                throw new NewExceptionType("Name already exists", HttpStatus.BAD_REQUEST);
+                throw new NewExceptionType("El nombre ya existe", HttpStatus.BAD_REQUEST);
             }
         }
         existingTournamentGroup.setName(tournamentGroup.getName());

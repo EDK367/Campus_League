@@ -60,7 +60,7 @@ public class TeamService implements TeamServiceInterface {
 
     @Transactional
     public TeamDTO getWithPlayers(Long id) {
-        Team team = teamRepository.findById(id).orElseThrow(() -> new NewExceptionType("Team not found with", HttpStatus.NOT_FOUND));
+        Team team = teamRepository.findById(id).orElseThrow(() -> new NewExceptionType("Equipo no encontrado con ", HttpStatus.NOT_FOUND));
 
         List<Player> players = team.getTeamPlayers().stream()
                 .map(TeamPlayer::getPlayer)
@@ -88,10 +88,10 @@ public class TeamService implements TeamServiceInterface {
     @Override
     @Transactional
     public Team activeTeam(Long id) {
-        Team team = teamRepository.findById(id).orElseThrow(() -> new NewExceptionType("Team not found with id " + id, HttpStatus.NOT_FOUND));
+        Team team = teamRepository.findById(id).orElseThrow(() -> new NewExceptionType("Equipo no encontrado con id " + id, HttpStatus.NOT_FOUND));
         if (team.getStatus() != null) {
             if (team.getStatus().getId() == 5L) {
-                throw new NewExceptionType("Team is already active", HttpStatus.BAD_REQUEST);
+                throw new NewExceptionType("El equipo ya esta aceptado", HttpStatus.BAD_REQUEST);
             }
         }
         team.setApproved_date(LocalDateTime.now());
@@ -108,7 +108,7 @@ public class TeamService implements TeamServiceInterface {
 
     @Transactional
     public Team getById(Long id) {
-        Team team = teamRepository.findById(id).orElseThrow(() -> new NewExceptionType("Team not found with id " + id, HttpStatus.NOT_FOUND));
+        Team team = teamRepository.findById(id).orElseThrow(() -> new NewExceptionType("Equipo no encontrado con id " + id, HttpStatus.NOT_FOUND));
         team.getTeamPlayers().size();
         return team;
     }
@@ -116,35 +116,35 @@ public class TeamService implements TeamServiceInterface {
     @Transactional
     public Team saveOne(Team team) {
         if (team == null) {
-            throw new NewExceptionType("Team cannot be null", HttpStatus.BAD_REQUEST);
+            throw new NewExceptionType("El equipo no puede ser nulo", HttpStatus.BAD_REQUEST);
         }
 
         if (team.getPlayers() == null || team.getPlayers().isEmpty()) {
-            throw new NewExceptionType("Players cannot be null or empty", HttpStatus.BAD_REQUEST);
+            throw new NewExceptionType("Los jugadores no pueden ser nulos o vacios", HttpStatus.BAD_REQUEST);
         }
 
         if (team.getName() == null || team.getName().trim().isBlank()) {
-            throw new NewExceptionType("Team name cannot be null", HttpStatus.BAD_REQUEST);
+            throw new NewExceptionType("El nombre del equipo no puede ser nulo", HttpStatus.BAD_REQUEST);
         }
 
         if (this.teamRepository.existsByName(team.getName())) {
-            throw new NewExceptionType("Team name already exists", HttpStatus.BAD_REQUEST);
+            throw new NewExceptionType("El nombre del equipo ya existe", HttpStatus.BAD_REQUEST);
         }
 
         if (team.getTournament() == null || team.getTournament().getId() == null) {
-            throw new NewExceptionType("Tournament cannot be null", HttpStatus.BAD_REQUEST);
+            throw new NewExceptionType("El torneo no puede ser nulo", HttpStatus.BAD_REQUEST);
         }
 
         Tournament tournament = tournamentService.getById(team.getTournament().getId());
 
         if (tournament.getInscriptions_open_date() == null || tournament.getInscriptions_close_date() == null) {
-            throw new NewExceptionType("Inscription dates are not properly configured", HttpStatus.BAD_REQUEST);
+            throw new NewExceptionType("Las fechas de inscripcion no estan configuraadas correctamente", HttpStatus.BAD_REQUEST);
         }
         if (tournament.getInscriptions_open_date().isAfter(LocalDateTime.now())) {
-            throw new NewExceptionType("Inscription period has not started yet", HttpStatus.BAD_REQUEST);
+            throw new NewExceptionType("El periodo de inscripcion aun no ha comenzado", HttpStatus.BAD_REQUEST);
         }
         if (tournament.getInscriptions_close_date().isBefore(LocalDateTime.now())) {
-            throw new NewExceptionType("Inscription period has already closed", HttpStatus.BAD_REQUEST);
+            throw new NewExceptionType("El perido de inscripcion ya ha finalizado", HttpStatus.BAD_REQUEST);
         }
 
         if (team.getStatus() == null) {
@@ -158,7 +158,7 @@ public class TeamService implements TeamServiceInterface {
         }
 
         if (team.getCaptain() == null || team.getCaptain().trim().isBlank()) {
-            throw new NewExceptionType("Captain cannot be null", HttpStatus.BAD_REQUEST);
+            throw new NewExceptionType("El capitan no puede ser nulo", HttpStatus.BAD_REQUEST);
         }
 
         Status fullStatus = statusService.getById(team.getStatus().getId());
@@ -167,19 +167,19 @@ public class TeamService implements TeamServiceInterface {
         List<Player> savedPlayers = team.getPlayers().stream().map(player -> {
 
             if (player.getNames() == null || player.getNames().trim().isBlank()) {
-                throw new NewExceptionType("Name is missing for the player with student ID: " + player.getCarnet(), HttpStatus.BAD_REQUEST);
+                throw new NewExceptionType("Falta el nombre del jugador con estudiante ID: " + player.getCarnet(), HttpStatus.BAD_REQUEST);
             }
             if (player.getAge() <= 15 || player.getAge() > 75) {
-                throw new NewExceptionType("Invalid age for player " + player.getNames(), HttpStatus.BAD_REQUEST);
+                throw new NewExceptionType("Edad no valida para el jugador " + player.getNames(), HttpStatus.BAD_REQUEST);
             }
             if (player.getCarnet() == null || player.getCarnet().trim().isBlank()) {
-                throw new NewExceptionType("Student ID (carnet) is missing for player " + player.getNames(), HttpStatus.BAD_REQUEST);
+                throw new NewExceptionType("Falda el estudiante ID (carnet) para el jugador " + player.getNames(), HttpStatus.BAD_REQUEST);
             }
             if (player.getPosition() == null || player.getPosition().getId() == null) {
-                throw new NewExceptionType("Position is missing for player " + player.getNames(), HttpStatus.BAD_REQUEST);
+                throw new NewExceptionType("Falta la posicion para el jugador " + player.getNames(), HttpStatus.BAD_REQUEST);
             }
             if (!this.playerPositionRepository.existsById(player.getPosition().getId())) {
-                throw new NewExceptionType("Position does not exist for player " + player.getNames(), HttpStatus.BAD_REQUEST);
+                throw new NewExceptionType("La posicion no existe para el jugador " + player.getNames(), HttpStatus.BAD_REQUEST);
             }
 
             PlayerPosition fullPosition = playerPositionService.getById(player.getPosition().getId());
@@ -203,11 +203,11 @@ public class TeamService implements TeamServiceInterface {
         }).collect(Collectors.toList());
 
         if (savedPlayers.size() > tournament.getMax_team_members()) {
-            throw new NewExceptionType("The team exceeds the maximum number of players allowed", HttpStatus.BAD_REQUEST);
+            throw new NewExceptionType("El equipo supera el numero maximo de jugadores permitidos", HttpStatus.BAD_REQUEST);
         }
 
         if (savedPlayers.size() < tournament.getMin_team_members()) {
-            throw new NewExceptionType("The team does not meet the minimum number of players required", HttpStatus.BAD_REQUEST);
+            throw new NewExceptionType("El equipo no cumple con el numero minimo de jugadores requerido", HttpStatus.BAD_REQUEST);
         }
 
         team.setPlayers(savedPlayers);
@@ -241,7 +241,7 @@ public class TeamService implements TeamServiceInterface {
     @Override
     public Team update(Long id, Team team) {
         System.out.println(team + " " + id);
-        Team existingTeam = teamRepository.findById(id).orElseThrow(() -> new RuntimeException("Team not found with id " + id));
+        Team existingTeam = teamRepository.findById(id).orElseThrow(() -> new RuntimeException("Equipo no encontrado con id " + id));
 
         existingTeam.setName(team.getName());
         existingTeam.setStatus(team.getStatus());
@@ -254,7 +254,7 @@ public class TeamService implements TeamServiceInterface {
 
     @Override
     public void delete(Long id) {
-        Team team = teamRepository.findById(id).orElseThrow(() -> new RuntimeException("Team not found with id " + id));
+        Team team = teamRepository.findById(id).orElseThrow(() -> new RuntimeException("Equipo no encontrado con id " + id));
 
         teamRepository.delete(team);
     }

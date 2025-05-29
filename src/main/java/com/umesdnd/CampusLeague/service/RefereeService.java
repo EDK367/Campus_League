@@ -21,22 +21,22 @@ public class RefereeService implements RefereeServiceInterface {
 
     @Override
     public Referee getById(Long id) {
-        return refereeRepository.findById(id).orElseThrow(() -> new NewExceptionType("Referee not found", HttpStatus.NOT_FOUND));
+        return refereeRepository.findById(id).orElseThrow(() -> new NewExceptionType("Arbitro no encontrado", HttpStatus.NOT_FOUND));
     }
 
     @Override
     public Referee saveOne(Referee referee) {
         if (referee.getExperience_years() == null) {
-            throw new NewExceptionType("Experience years cannot be null", HttpStatus.BAD_REQUEST);
+            throw new NewExceptionType("Los años de experiencia no pueden ser nulos", HttpStatus.BAD_REQUEST);
         }
         if (referee.getExperience_years() < 0 || referee.getExperience_years() > 50) {
             String message = (referee.getExperience_years() < 0)
-                    ? "Experience years cannot be negative"
-                    : "Experience years cannot be greater than 50";
+                    ? "Los años de experiencia no pueden ser negativos"
+                    : "Los años de experiencia no pueden ser mayores a 50";
             throw new NewExceptionType(message, HttpStatus.BAD_REQUEST);
         }
         if (referee.getName() == null || referee.getName().isBlank()) {
-            throw new NewExceptionType("Name cannot be null or empty", HttpStatus.BAD_REQUEST);
+            throw new NewExceptionType("El nombre no puede ser nulo o vacio", HttpStatus.BAD_REQUEST);
         }
         referee.setStatus(statusService.getById(1L));
         return refereeRepository.save(referee);
@@ -44,7 +44,7 @@ public class RefereeService implements RefereeServiceInterface {
 
     @Override
     public Referee update(Long id, Referee referee) {
-        Referee existingReferee = refereeRepository.findById(id).orElseThrow(() -> new NewExceptionType("Referee not found", HttpStatus.NOT_FOUND));
+        Referee existingReferee = refereeRepository.findById(id).orElseThrow(() -> new NewExceptionType("Arbitro no encontrado", HttpStatus.NOT_FOUND));
 
 
         if (referee.getStatus() != null) {
@@ -54,15 +54,15 @@ public class RefereeService implements RefereeServiceInterface {
         if (referee.getExperience_years() != null) {
             if (referee.getExperience_years() < 0 || referee.getExperience_years() > 50) {
                 String message = (referee.getExperience_years() < 0)
-                        ? "Experience years cannot be negative"
-                        : "Experience years cannot be greater than 50";
+                        ? "Los años de experiencia no pueden ser negativos"
+                        : "Los años de experiencia no pueden ser mayores a 50";
                 throw new NewExceptionType(message, HttpStatus.BAD_REQUEST);
             }
             existingReferee.setExperience_years(referee.getExperience_years());
         }
 
         if (referee.getName() != null && referee.getName().isBlank()) {
-            throw new NewExceptionType("Name cannot be empty", HttpStatus.BAD_REQUEST);
+            throw new NewExceptionType("El nombre no puede estar vacio", HttpStatus.BAD_REQUEST);
         }
 
         if(referee.getName() != null) {
@@ -74,7 +74,7 @@ public class RefereeService implements RefereeServiceInterface {
 
     @Override
     public void delete(Long id) {
-        Referee existingReferee = refereeRepository.findById(id).orElseThrow(() -> new NewExceptionType("Referee not found", HttpStatus.NOT_FOUND));
+        Referee existingReferee = refereeRepository.findById(id).orElseThrow(() -> new NewExceptionType("Arbitro no encontrado", HttpStatus.NOT_FOUND));
         existingReferee.setStatus(statusService.getById(2L));
         this.refereeRepository.save(existingReferee);
     }
