@@ -35,10 +35,10 @@ public class Team {
     @Column(name = "approved_date", nullable = true)
     private LocalDateTime approved_date;
 
-    @Column(name = "contact_email", nullable = false, unique = false)
+    @Column(name = "contact_email", nullable = false)
     private String contact_email;
 
-    @Column(name = "contact_phone", nullable = false, unique = false)
+    @Column(name = "contact_phone", nullable = false)
     private String contact_phone;
 
     //@Column(name = "logo", nullable = true, updatable = false)

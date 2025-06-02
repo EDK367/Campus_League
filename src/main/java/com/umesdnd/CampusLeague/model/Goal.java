@@ -31,8 +31,9 @@ public class Goal {
     @JoinColumn(name = "match_id", nullable = false)
     private Match match;
 
-    @CreationTimestamp
-    @Column(name = "goal_time", columnDefinition = "DATETIME(6) DEFAULT CURRENT_TIMESTAMP(6)", nullable = false)
+    @Column(name = "goal_time", nullable =
+
+    )
     private LocalDateTime goal_time;
 
     @Column(name = "points", nullable = true)
