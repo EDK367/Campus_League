@@ -31,9 +31,7 @@ public class Goal {
     @JoinColumn(name = "match_id", nullable = false)
     private Match match;
 
-    @Column(name = "goal_time", nullable =
-
-    )
+    @Column(name = "goal_time", nullable = false)
     private LocalDateTime goal_time;
 
     @Column(name = "points", nullable = true)
