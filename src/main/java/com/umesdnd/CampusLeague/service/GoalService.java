@@ -29,6 +29,7 @@ public class GoalService implements GoalServiceInterface {
         Goal existingGoal = goalRepository.findById(id).orElseThrow(() -> new RuntimeException("Meta no encontrada"));
 
         existingGoal.setPlayer(goal.getPlayer());
+        existingGoal.setTeam(goal.getTeam());
         existingGoal.setMatch(goal.getMatch());
         existingGoal.setGoal_time(goal.getGoal_time());
         existingGoal.setPoints(goal.getPoints());

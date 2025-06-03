@@ -2,12 +2,12 @@ package com.umesdnd.CampusLeague.service;
 
 import com.umesdnd.CampusLeague.exception.NewExceptionType;
 import com.umesdnd.CampusLeague.model.*;
+import com.umesdnd.CampusLeague.model.DTO.PlayersDTO;
 import com.umesdnd.CampusLeague.model.DTO.TeamDTO;
 import com.umesdnd.CampusLeague.repository.PlayerPositionRepository;
 import com.umesdnd.CampusLeague.repository.PlayerRepository;
 import com.umesdnd.CampusLeague.repository.TeamPlayerRepository;
 import com.umesdnd.CampusLeague.repository.TeamRepository;
-import com.umesdnd.CampusLeague.service.interfaces.PlayerPositionServiceInterface;
 import com.umesdnd.CampusLeague.service.interfaces.TeamPlayerServiceInterface;
 import com.umesdnd.CampusLeague.service.interfaces.TeamServiceInterface;
 import com.umesdnd.CampusLeague.utills.DuplicateData;
@@ -101,9 +101,28 @@ public class TeamService implements TeamServiceInterface {
     }
 
     @Override
-    public List<TeamPlayer> positionTeam(Long id) {
-        List<TeamPlayer> teamPlayers = teamPlayerService.positionTeam(id);
+    public List<TeamPlayer> playersTeamsId(Long id) {
+        List<TeamPlayer> teamPlayers = teamPlayerService.playersTeamIdP(id);
         return teamPlayers;
+    }
+
+    @Override
+    public List<PlayersDTO> playersTeamsIdDTO(Long id) {
+        List<TeamPlayer> teamPlayers = teamPlayerService.playersTeamIdP(id);
+        List<PlayersDTO> teamPlayersDTO = teamPlayers.stream()
+                .map(teamPlayer -> {
+                    PlayersDTO playersDTO = PlayersDTO.builder()
+                            .id(teamPlayer.getPlayer().getId())
+                            .names(teamPlayer.getPlayer().getNames())
+                            .age(teamPlayer.getPlayer().getAge())
+                            .position(teamPlayer.getPlayerPosition())
+                            .status(teamPlayer.getPlayer().getStatus())
+                            .created_at(teamPlayer.getPlayer().getCreated_at())
+                            .build();
+                    return playersDTO;
+                })
+                .collect(Collectors.toList());
+        return teamPlayersDTO;
     }
 
     @Transactional

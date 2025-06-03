@@ -28,6 +28,10 @@ public class Goal {
     private Player player;
 
     @ManyToOne
+    @JoinColumn(name = "team_id", nullable = false)
+    private Team team;
+
+    @ManyToOne
     @JoinColumn(name = "match_id", nullable = false)
     private Match match;
 

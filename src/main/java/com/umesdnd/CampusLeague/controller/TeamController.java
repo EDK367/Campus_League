@@ -1,7 +1,9 @@
 package com.umesdnd.CampusLeague.controller;
 
+import com.umesdnd.CampusLeague.model.DTO.PlayersDTO;
 import com.umesdnd.CampusLeague.model.DTO.TeamDTO;
 import com.umesdnd.CampusLeague.model.Team;
+import com.umesdnd.CampusLeague.model.TeamPlayer;
 import com.umesdnd.CampusLeague.service.TeamService;
 import com.umesdnd.CampusLeague.service.interfaces.TeamServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/equipo")
@@ -24,10 +27,16 @@ public class TeamController {
             return new ResponseEntity<>(team, HttpStatus.OK);
     }
 
-    @GetMapping("/jugadores/{id}")
-    public ResponseEntity<List> getTeamPlayers(@PathVariable Long id) {
-        List teamPlayers = teamService.positionTeam(id);
+    @GetMapping("/jugadores-info/{id}")
+    public ResponseEntity<List<TeamPlayer>> getTeamPlayers(@PathVariable Long id) {
+        List<TeamPlayer> teamPlayers = teamService.playersTeamsId(id);
         return new ResponseEntity<>(teamPlayers, HttpStatus.OK);
+    }
+
+    @GetMapping("/jugadores/{id}")
+    public ResponseEntity<List<PlayersDTO>> getTeamPlayer(@PathVariable Long id) {
+        List<PlayersDTO> players = teamService.playersTeamsIdDTO(id);
+        return new ResponseEntity<>(players, HttpStatus.OK);
     }
 
     @PutMapping("/aceptado/{id}")

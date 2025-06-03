@@ -29,4 +29,5 @@ public class Winner {
     @ManyToOne
     @JoinColumn(name = "tournament_id", nullable = false)
     private Tournament tournament;
+
 }

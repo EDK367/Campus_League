@@ -26,6 +26,7 @@ public class SecurityConfig {
     // rutas para los end points publicos, solo get
     private final String[] endPointsGet = {
             "/torneo/**",
+            "/meta/**",
             "/deporte/**",
             "/posicion-jugador/**",
             "/equipo-torneo/**",

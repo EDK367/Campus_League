@@ -5,5 +5,5 @@ import com.umesdnd.CampusLeague.model.TeamPlayer;
 import java.util.List;
 
 public interface TeamPlayerServiceInterface {
-    List<TeamPlayer> positionTeam(Long id);
+    List<TeamPlayer> playersTeamIdP(Long id);
 }

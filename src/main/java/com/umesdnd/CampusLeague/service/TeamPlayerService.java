@@ -15,7 +15,7 @@ public class TeamPlayerService implements TeamPlayerServiceInterface {
     private TeamPlayerRepository teamPlayerRepository;
 
     @Override
-    public List<TeamPlayer> positionTeam(Long id) {
+    public List<TeamPlayer> playersTeamIdP(Long id) {
         List<TeamPlayer> teamPlayers = teamPlayerRepository.findByTeamId(id);
         return teamPlayers;
     }
