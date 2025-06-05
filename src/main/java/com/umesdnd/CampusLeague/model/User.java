@@ -3,10 +3,7 @@ package com.umesdnd.CampusLeague.model;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.CurrentTimestamp;
-import org.springframework.boot.context.properties.bind.DefaultValue;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
@@ -63,7 +60,7 @@ public class User implements UserDetails {
     }
     @Override
     public boolean isEnabled() {
-        if (this.status.getStatus_name().equalsIgnoreCase("Active")) {
+        if (this.status.getId() == 1) {
             return true;
         }
         return false;

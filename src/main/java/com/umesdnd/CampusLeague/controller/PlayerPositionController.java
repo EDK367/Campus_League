@@ -30,12 +30,8 @@ public class PlayerPositionController {
 
     @GetMapping("/{id}")
     public ResponseEntity<PlayerPosition> getPlayerPositionById(@PathVariable Long id) {
-        try {
             PlayerPosition position = playerPositionService.getById(id);
-            return ResponseEntity.ok(position);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
+            return new ResponseEntity<>(position, HttpStatus.OK);
     }
 
     @PostMapping("")

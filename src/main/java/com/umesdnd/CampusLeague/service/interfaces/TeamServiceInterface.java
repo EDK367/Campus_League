@@ -1,7 +1,9 @@
 package com.umesdnd.CampusLeague.service.interfaces;
 
+import com.umesdnd.CampusLeague.model.DTO.TeamDTO;
 import com.umesdnd.CampusLeague.model.Team;
 import com.umesdnd.CampusLeague.service.interfaces.common.CrudServiceInterface;
 
 public interface TeamServiceInterface extends CrudServiceInterface<Team> {
+    TeamDTO getWithPlayers(Long id);
 }
