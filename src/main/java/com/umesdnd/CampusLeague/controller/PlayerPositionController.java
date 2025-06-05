@@ -18,6 +18,12 @@ public class PlayerPositionController {
     private PlayerPositionService playerPositionService;
 
 
+    @GetMapping("/deporte/{id}")
+    public ResponseEntity<List<PlayerPosition>> getPlayerPositionBySportId(@PathVariable Long id) {
+        List<PlayerPosition> sportPositions = playerPositionService.getPositionSport(id);
+        return new ResponseEntity<>(sportPositions, HttpStatus.OK);
+    }
+
     @GetMapping("")
     public ResponseEntity<List<PlayerPosition>> getAllPlayerPositions() {
         try {

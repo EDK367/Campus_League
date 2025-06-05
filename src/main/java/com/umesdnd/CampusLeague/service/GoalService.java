@@ -18,7 +18,7 @@ public class GoalService implements GoalServiceInterface {
 
     @Override
     public Goal getById(Long id){
-        return goalRepository.findById(id).orElseThrow(() -> new NewExceptionType("Goal not found", HttpStatus.NOT_FOUND));
+        return goalRepository.findById(id).orElseThrow(() -> new NewExceptionType("Meta no encontrada", HttpStatus.NOT_FOUND));
     }
 
     @Override
@@ -26,9 +26,10 @@ public class GoalService implements GoalServiceInterface {
 
     @Override
     public Goal update(Long id, Goal goal){
-        Goal existingGoal = goalRepository.findById(id).orElseThrow(() -> new RuntimeException("Goal not found"));
+        Goal existingGoal = goalRepository.findById(id).orElseThrow(() -> new RuntimeException("Meta no encontrada"));
 
         existingGoal.setPlayer(goal.getPlayer());
+        existingGoal.setTeam(goal.getTeam());
         existingGoal.setMatch(goal.getMatch());
         existingGoal.setGoal_time(goal.getGoal_time());
         existingGoal.setPoints(goal.getPoints());
@@ -39,7 +40,7 @@ public class GoalService implements GoalServiceInterface {
     @Override
     public void delete(Long id){
         if (!goalRepository.existsById(id)) {
-            throw new RuntimeException("Goal with ID " + id + " not found");
+            throw new RuntimeException("Meta con ID " + id + " no  encontrada");
         }
         goalRepository.deleteById(id);
     }

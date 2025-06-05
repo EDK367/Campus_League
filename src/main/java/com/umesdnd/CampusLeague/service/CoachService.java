@@ -39,7 +39,7 @@ public class CoachService implements CoachServiceInterface {
     @Override
     public void delete(Long id) {
         if (!coachRepository.existsById(id)){
-            throw new RuntimeException("Coach with ID " + id + " not found");
+            throw new RuntimeException("Entrenador con ID " + id + " no encontrado");
         }
         coachRepository.deleteById(id);
     }

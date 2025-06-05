@@ -22,9 +22,10 @@ public class TournamentController {
         return new ResponseEntity<>(tournament, HttpStatus.OK);
     }
 
-    @GetMapping
+    @GetMapping("")
     public ResponseEntity<List<Tournament>> getAllTournament() {
         List<Tournament> tournaments = tournamentService.getAll();
+        //System.out.println("aca estan los torneso " + tournaments);
         return new ResponseEntity<>(tournaments, HttpStatus.OK);
     }
 

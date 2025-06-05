@@ -1,5 +1,6 @@
 package com.umesdnd.CampusLeague.service.interfaces;
 
+import com.umesdnd.CampusLeague.model.DTO.NewPassword;
 import com.umesdnd.CampusLeague.model.User;
 
 
@@ -13,4 +14,5 @@ public interface UserInterfaceService {
 
     public void deleteUser(Long idUser);
 
+    void newPassword(String token, NewPassword newPassword);
 }

@@ -47,12 +47,8 @@ public class PlayerController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deletePlayer(@PathVariable Long id) {
-        try {
-            playerService.delete(id);
-            return ResponseEntity.ok("Jugador eliminado con éxito");
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al eliminar el jugador");
-        }
+        playerService.delete(id);
+        return new ResponseEntity<>("", HttpStatus.NO_CONTENT);
     }
 
     @GetMapping("")

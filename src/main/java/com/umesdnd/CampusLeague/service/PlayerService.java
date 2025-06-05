@@ -1,10 +1,12 @@
 package com.umesdnd.CampusLeague.service;
 
+import com.umesdnd.CampusLeague.exception.NewExceptionType;
 import com.umesdnd.CampusLeague.model.Player;
 import com.umesdnd.CampusLeague.model.Status;
 import com.umesdnd.CampusLeague.repository.PlayerRepository;
 import com.umesdnd.CampusLeague.service.interfaces.PlayerServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,7 +23,7 @@ public class PlayerService implements PlayerServiceInterface {
     @Override
     public Player getById(Long id) {
         return playerRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Player with ID " + id + " not found"));
+                .orElseThrow(() -> new NewExceptionType("Jugador con ID " + id + " no encontrado", HttpStatus.NOT_FOUND));
     }
 
     @Override
@@ -32,7 +34,7 @@ public class PlayerService implements PlayerServiceInterface {
     @Override
     public Player update(Long id, Player player) {
         Player existingPlayer = playerRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Player with ID " + id + " not found"));
+                .orElseThrow(() -> new RuntimeException("Jugador con ID " + id + " no encontrado"));
 
         Status status = statusService.getById(player.getStatus().getId());
 
@@ -40,7 +42,6 @@ public class PlayerService implements PlayerServiceInterface {
         existingPlayer.setAge(player.getAge());
         existingPlayer.setCarnet(player.getCarnet());
         existingPlayer.setPosition(player.getPosition());
-        existingPlayer.setTeam(player.getTeam());
         existingPlayer.setStatus(status);
 
         return playerRepository.save(existingPlayer);
@@ -48,10 +49,9 @@ public class PlayerService implements PlayerServiceInterface {
 
     @Override
     public void delete(Long id) {
-        if (!playerRepository.existsById(id)) {
-            throw new RuntimeException("Player with ID " + id + " not found");
-        }
-        playerRepository.deleteById(id);
+        Player player = playerRepository.findById(id).orElseThrow(() -> new NewExceptionType("Jugador con ID \" + id + \" no encontrado", HttpStatus.NOT_FOUND));
+        player.setStatus(statusService.getById(2L));
+        playerRepository.save(player);
     }
 
     @Override
@@ -59,8 +59,10 @@ public class PlayerService implements PlayerServiceInterface {
         return playerRepository.findAll();
     }
 
+    // pendiente realizar de manrea correcta la consulta
     @Override
     public List<Player> findByTeamId(Long teamId) {
-        return playerRepository.getByTeam(teamId);
+        //return playerRepository.getByTeam(teamId);
+        return null;
     }
 }

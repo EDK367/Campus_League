@@ -5,10 +5,13 @@ public class HashPass {
     public static void main(String[] args) {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
-        String plainPassword = "1234";
+        String plainPassword = "admin";
 
         String hashedPassword = encoder.encode(plainPassword);
 
+        for (int i = 0; i < 20; i++) {
+            System.out.println("hjola " + i);
+        }
         System.out.println("Contraseña encriptada: " + hashedPassword);
     }
 }

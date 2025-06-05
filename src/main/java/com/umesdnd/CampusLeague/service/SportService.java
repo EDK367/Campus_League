@@ -18,7 +18,7 @@ public class SportService implements SportServiceInterface {
 
     @Override
     public Sport getById(Long id) {
-        return sportRepository.findById(id).orElseThrow(() -> new NewExceptionType("Sport not found", HttpStatus.NOT_FOUND));
+        return sportRepository.findById(id).orElseThrow(() -> new NewExceptionType("Deporte no encontrado", HttpStatus.NOT_FOUND));
     }
 
     @Override
@@ -26,7 +26,7 @@ public class SportService implements SportServiceInterface {
 
     @Override
     public Sport update(Long id, Sport sport) {
-        Sport existingSport = sportRepository.findById(id).orElseThrow(() -> new RuntimeException("Sport not found"));
+        Sport existingSport = sportRepository.findById(id).orElseThrow(() -> new RuntimeException("Deporte no encontrado"));
 
         existingSport.setSport_name(sport.getSport_name());
 
@@ -36,7 +36,7 @@ public class SportService implements SportServiceInterface {
     @Override
     public void delete(Long id) {
         if (!sportRepository.existsById(id)){
-            throw new RuntimeException("Sport with ID " + id + " not found");
+            throw new RuntimeException("Deporte con ID " + id + " no encontrado");
         }
         sportRepository.deleteById(id);
     }

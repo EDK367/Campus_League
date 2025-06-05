@@ -1,6 +1,7 @@
 package com.umesdnd.CampusLeague.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -10,6 +11,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "players")
@@ -36,10 +38,12 @@ public class Player {
     @JoinColumn(name = "position_id", nullable = false)
     private PlayerPosition position;
 
+    /*
     @ManyToOne
     @JoinColumn(name = "team_id", nullable = false)
     @JsonBackReference
     private Team team;
+     */
 
     @ManyToOne
     @JoinColumn(name = "status_id", nullable = false)
@@ -48,5 +52,10 @@ public class Player {
     @CreationTimestamp
     @Column(name = "created_at", columnDefinition = "DATETIME(6) DEFAULT CURRENT_TIMESTAMP(6)", nullable = true, updatable = false)
     private LocalDateTime created_at;
+
+
+    @OneToMany(mappedBy = "player", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private List<TeamPlayer> teamPlayers;
 
 }

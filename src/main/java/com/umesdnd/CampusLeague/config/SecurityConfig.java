@@ -5,10 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpRequest;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -29,8 +26,14 @@ public class SecurityConfig {
     // rutas para los end points publicos, solo get
     private final String[] endPointsGet = {
             "/torneo/**",
+            "/meta/**",
             "/deporte/**",
-            "/posicion-jugador/**"
+            "/posicion-jugador/**",
+            "/equipo-torneo/**",
+            "/ganador/**",
+            "/inscripcion/**",
+            "/mi-equipo/**",
+            "/equipo/jugadores/**",
     };
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -40,10 +43,14 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         // para login, para registro de equipos y sus jugadores, para lectura de torneos. Las rutas estan libres
                         .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/auth/request-reset").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/auth/verify-code").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/auth/reset-password").permitAll()
                         .requestMatchers(HttpMethod.POST, "/equipo").permitAll()
                         .requestMatchers(HttpMethod.PUT, "/equipo/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/jugador").permitAll()
                         .requestMatchers(HttpMethod.PUT, "/jugador").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/email/**").permitAll()
                         .requestMatchers(HttpMethod.GET, endPointsGet).permitAll()
                         // para documentacion con sweager & sweagger-ui
                         // documentacion: http://localhost:8080/campus-league/api/swagger-ui/index.html

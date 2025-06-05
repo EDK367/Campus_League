@@ -1,15 +1,20 @@
 package com.umesdnd.CampusLeague.service;
 
 import com.umesdnd.CampusLeague.exception.NewExceptionType;
+import com.umesdnd.CampusLeague.model.DTO.NewPassword;
 import com.umesdnd.CampusLeague.model.Status;
 import com.umesdnd.CampusLeague.model.User;
 import com.umesdnd.CampusLeague.repository.UserRepository;
+import com.umesdnd.CampusLeague.service.Token.JwtPasswordService;
+import com.umesdnd.CampusLeague.service.Token.JwtService;
 import com.umesdnd.CampusLeague.service.interfaces.UserInterfaceService;
 import com.umesdnd.CampusLeague.utills.BCryptPassService;
 import com.umesdnd.CampusLeague.utills.DecipherPasswordService;
+import org.antlr.v4.runtime.Token;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 
 @Service
@@ -26,6 +31,11 @@ public class UserService implements UserInterfaceService {
 
     @Autowired
     private BCryptPassService bCryptPassService;
+
+    private JwtService jwtService;
+
+    @Autowired
+    private JwtPasswordService jwtPasswordService;
 
     @Override
     public User getUserId(Long idUser) {
@@ -89,5 +99,37 @@ public class UserService implements UserInterfaceService {
         status.setId(2L);
         user.setStatus(status);
         this.userRepository.save(user);
+    }
+
+    @Override
+    @Transactional
+    public void newPassword(String token, NewPassword newPassword) {
+
+        if (token == null || token.trim().isBlank()) {
+            throw new NewExceptionType("No se tiene autorización", HttpStatus.BAD_REQUEST);
+        }
+
+        if (!jwtPasswordService.isTokenValid(token)) {
+            throw new NewExceptionType("No se tiene autorización, el token puede haber vencido", HttpStatus.UNAUTHORIZED);
+        }
+        BCryptPassService bCryptPassService = new BCryptPassService();
+
+        if (newPassword == null) {
+            throw new NewExceptionType("No se recivio ningun usuario", HttpStatus.BAD_REQUEST);
+        }
+        if (newPassword.getEmail() == null || newPassword.getEmail().trim().isBlank()) {
+            throw new NewExceptionType("El correo electrónico no puede estar vacío", HttpStatus.BAD_REQUEST);
+        }
+        if (newPassword.getPassword() == null || newPassword.getPassword().trim().isBlank()) {
+            throw new NewExceptionType("La contraseña no puede estar vacía", HttpStatus.BAD_REQUEST);
+        }
+
+        if (!userRepository.existsByEmail(newPassword.getEmail())) {
+            throw new NewExceptionType("No se pudo encontrar al usuario, por favor hablar con soporte", HttpStatus.BAD_REQUEST);
+        }
+
+        String pass = bCryptPassService.getBCriptPasswordUser(newPassword.getPassword());
+        userRepository.updatePasswordByEmail(pass, newPassword.getEmail());
+
     }
 }

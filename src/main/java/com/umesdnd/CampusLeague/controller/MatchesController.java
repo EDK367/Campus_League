@@ -3,6 +3,7 @@ package com.umesdnd.CampusLeague.controller;
 import com.umesdnd.CampusLeague.model.Match;
 import com.umesdnd.CampusLeague.model.Tournament;
 import com.umesdnd.CampusLeague.service.MatchService;
+import com.umesdnd.CampusLeague.service.interfaces.MatchServiceInterface;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,7 +17,7 @@ import java.util.List;
 public class MatchesController {
 
     @Autowired
-    private MatchService matchService;
+    private MatchServiceInterface matchService;
 
     @GetMapping("/{id}")
     public ResponseEntity<Match> getMatchById(@PathVariable Long id) {

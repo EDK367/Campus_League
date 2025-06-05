@@ -28,11 +28,14 @@ public class Goal {
     private Player player;
 
     @ManyToOne
+    @JoinColumn(name = "team_id", nullable = false)
+    private Team team;
+
+    @ManyToOne
     @JoinColumn(name = "match_id", nullable = false)
     private Match match;
 
-    @CreationTimestamp
-    @Column(name = "goal_time", columnDefinition = "DATETIME(6) DEFAULT CURRENT_TIMESTAMP(6)", nullable = false)
+    @Column(name = "goal_time", nullable = false)
     private LocalDateTime goal_time;
 
     @Column(name = "points", nullable = true)
