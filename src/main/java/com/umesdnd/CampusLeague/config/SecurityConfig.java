@@ -43,10 +43,14 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         // para login, para registro de equipos y sus jugadores, para lectura de torneos. Las rutas estan libres
                         .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/auth/request-reset").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/auth/verify-code").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/auth/reset-password").permitAll()
                         .requestMatchers(HttpMethod.POST, "/equipo").permitAll()
                         .requestMatchers(HttpMethod.PUT, "/equipo/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/jugador").permitAll()
                         .requestMatchers(HttpMethod.PUT, "/jugador").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/email/**").permitAll()
                         .requestMatchers(HttpMethod.GET, endPointsGet).permitAll()
                         // para documentacion con sweager & sweagger-ui
                         // documentacion: http://localhost:8080/campus-league/api/swagger-ui/index.html
