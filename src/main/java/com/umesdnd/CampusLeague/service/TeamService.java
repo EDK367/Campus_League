@@ -278,7 +278,7 @@ public class TeamService implements TeamServiceInterface {
     @Transactional
     public List<Team> getAll() {
         List<Team> teams = teamRepository.findAll();
-        teams.forEach(team -> team.getPlayers().size());
+        teams.forEach(team -> team.getPlayers());
         return teamRepository.findAll();
     }
 }
