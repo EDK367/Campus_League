@@ -2,6 +2,7 @@ package com.umesdnd.CampusLeague.service;
 
 import com.umesdnd.CampusLeague.exception.NewExceptionType;
 import com.umesdnd.CampusLeague.model.Coach;
+import com.umesdnd.CampusLeague.model.PlayerPosition;
 import com.umesdnd.CampusLeague.repository.CoachRepository;
 import com.umesdnd.CampusLeague.service.interfaces.CoachServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +43,8 @@ public class CoachService implements CoachServiceInterface {
             throw new RuntimeException("Entrenador con ID " + id + " no encontrado");
         }
         coachRepository.deleteById(id);
+        Coach existingCoach = coachRepository.findById(id).orElseThrow(() -> new RuntimeException("Coach not found"));
+        coachRepository.delete(existingCoach);
     }
 
     @Override

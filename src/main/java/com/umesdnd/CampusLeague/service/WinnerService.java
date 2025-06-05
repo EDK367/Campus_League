@@ -59,7 +59,7 @@ public class WinnerService implements WinnerServiceInterface {
             throw new NewExceptionType("La posicion no puede ser menor a 1", HttpStatus.BAD_REQUEST);
         }
 
-        if (winnerRepository.existsByTournamentIdAndTeamId(tournament.getId(), winnerTeam.getId())) {
+        if (winnerRepository.existsByTournamentIdAndTeamIdAndPositionNot(tournament.getId(), winnerTeam.getId(), 0)) {
             throw new NewExceptionType("El ganador ya existe", HttpStatus.BAD_REQUEST);
         }
 

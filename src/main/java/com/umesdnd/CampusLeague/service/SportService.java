@@ -1,6 +1,7 @@
 package com.umesdnd.CampusLeague.service;
 
 import com.umesdnd.CampusLeague.exception.NewExceptionType;
+import com.umesdnd.CampusLeague.model.PlayerPosition;
 import com.umesdnd.CampusLeague.model.Sport;
 import com.umesdnd.CampusLeague.repository.SportRepository;
 import com.umesdnd.CampusLeague.service.interfaces.SportServiceInterface;
@@ -39,6 +40,9 @@ public class SportService implements SportServiceInterface {
             throw new RuntimeException("Deporte con ID " + id + " no encontrado");
         }
         sportRepository.deleteById(id);
+        Sport existingSport = sportRepository.findById(id).orElseThrow(() -> new RuntimeException("Sport not found"));
+
+        sportRepository.delete(existingSport);
     }
 
     @Override

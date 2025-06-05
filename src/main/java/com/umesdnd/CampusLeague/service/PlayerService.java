@@ -1,6 +1,7 @@
 package com.umesdnd.CampusLeague.service;
 
 import com.umesdnd.CampusLeague.exception.NewExceptionType;
+import com.umesdnd.CampusLeague.model.Match;
 import com.umesdnd.CampusLeague.model.Player;
 import com.umesdnd.CampusLeague.model.Status;
 import com.umesdnd.CampusLeague.repository.PlayerRepository;
@@ -52,6 +53,9 @@ public class PlayerService implements PlayerServiceInterface {
         Player player = playerRepository.findById(id).orElseThrow(() -> new NewExceptionType("Jugador con ID \" + id + \" no encontrado", HttpStatus.NOT_FOUND));
         player.setStatus(statusService.getById(2L));
         playerRepository.save(player);
+        Player existingPlayer = playerRepository.findById(id).orElseThrow(() -> new NewExceptionType("Player not found", HttpStatus.NOT_FOUND));
+        existingPlayer.setStatus(statusService.getById(7L));
+        playerRepository.save(existingPlayer);
     }
 
     @Override

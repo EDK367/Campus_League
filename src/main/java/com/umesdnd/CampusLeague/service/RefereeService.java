@@ -75,7 +75,7 @@ public class RefereeService implements RefereeServiceInterface {
     @Override
     public void delete(Long id) {
         Referee existingReferee = refereeRepository.findById(id).orElseThrow(() -> new NewExceptionType("Arbitro no encontrado", HttpStatus.NOT_FOUND));
-        existingReferee.setStatus(statusService.getById(2L));
+        existingReferee.setStatus(statusService.getById(7L));
         this.refereeRepository.save(existingReferee);
     }
 

@@ -274,8 +274,10 @@ public class TeamService implements TeamServiceInterface {
     @Override
     public void delete(Long id) {
         Team team = teamRepository.findById(id).orElseThrow(() -> new RuntimeException("Equipo no encontrado con id " + id));
-
         teamRepository.delete(team);
+        Team existingTeam = teamRepository.findById(id).orElseThrow(() -> new NewExceptionType("Team not found", HttpStatus.NOT_FOUND));
+        existingTeam.setStatus(statusService.getById(7L));
+        teamRepository.save(existingTeam);
     }
 
     @Transactional

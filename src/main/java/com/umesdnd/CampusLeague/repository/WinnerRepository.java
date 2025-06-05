@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface WinnerRepository extends JpaRepository<Winner, Long> {
-    boolean existsByTournamentIdAndTeamId(Long tournamentId, Long teamId);
+    boolean existsByTournamentIdAndTeamIdAndPositionNot(Long tournamentId, Long teamId, Integer position);
 
     @Query("SELECT COUNT(w) > 0 FROM Winner w WHERE w.tournament.id = :tournamentId AND w.position = :position AND w.team.id <> :teamId")
     boolean existsByTournamentIdAndPositionAndTeamIdIsNot(Long tournamentId, int position, Long teamId);
