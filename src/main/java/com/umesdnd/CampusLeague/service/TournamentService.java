@@ -3,6 +3,7 @@ package com.umesdnd.CampusLeague.service;
 import com.umesdnd.CampusLeague.exception.NewExceptionType;
 import com.umesdnd.CampusLeague.model.Tournament;
 import com.umesdnd.CampusLeague.repository.TournamentRepository;
+import com.umesdnd.CampusLeague.repository.UserRepository;
 import com.umesdnd.CampusLeague.service.interfaces.TournamentServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,13 +17,20 @@ public class TournamentService implements TournamentServiceInterface{
     @Autowired
     private TournamentRepository tournamentRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
     @Override
     public Tournament getById(Long id) {
         return tournamentRepository.findById(id).orElseThrow(() -> new NewExceptionType("Torneo no encontrado", HttpStatus.NOT_FOUND));
     }
 
     @Override
-    public Tournament saveOne(Tournament tournament) {return tournamentRepository.save(tournament);}
+    public Tournament saveOne(Tournament tournament) {
+        tournament.setId(null);
+        tournament.setUser(userRepository.findById(1L).orElseThrow(() -> new NewExceptionType("Usuario no encontrado", HttpStatus.NOT_FOUND)));
+        return tournamentRepository.save(tournament);
+    }
 
     @Override
     public Tournament update(Long id, Tournament tournament) {

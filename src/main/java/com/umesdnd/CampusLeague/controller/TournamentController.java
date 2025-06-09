@@ -29,7 +29,7 @@ public class TournamentController {
         return new ResponseEntity<>(tournaments, HttpStatus.OK);
     }
 
-    @PostMapping
+    @PostMapping("")
     public ResponseEntity<Tournament> saveTournament(@RequestBody Tournament tournament) {
         Tournament savedTournament = tournamentService.saveOne(tournament);
         return new ResponseEntity<>(savedTournament, HttpStatus.CREATED);

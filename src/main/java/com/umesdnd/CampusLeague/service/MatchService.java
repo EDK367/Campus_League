@@ -44,7 +44,7 @@ public class MatchService implements MatchServiceInterface {
 
     @Transactional
     public Match saveOne(Match match) {
-        //System.out.println(match);
+        System.out.println(match);
         // validacion de objetos
         if (match.getTournament() == null) {
             throw new NewExceptionType("El torneo es requerido", HttpStatus.BAD_REQUEST);
@@ -58,6 +58,7 @@ public class MatchService implements MatchServiceInterface {
         if (match.getField() == null) {
             throw new NewExceptionType("El campo es requerido", HttpStatus.BAD_REQUEST);
         }
+
         if (match.getReferee() == null) {
             throw new NewExceptionType("El arbitro es requerido", HttpStatus.BAD_REQUEST);
         }
@@ -75,11 +76,11 @@ public class MatchService implements MatchServiceInterface {
         }
 
         // validacion de equipos, campo y del referee
-        if (existingTeam1.getStatus().getId() != 1) {
-            throw new NewExceptionType("Equipo: " + existingTeam1.getName() + " es el perdedor", HttpStatus.BAD_REQUEST);
+        if (existingTeam1.getStatus().getId() != 1 && existingTeam1.getStatus().getId() != 5 ) {
+            throw new NewExceptionType("Equipo: " + existingTeam1.getName() + " no puede participar mas", HttpStatus.BAD_REQUEST);
         }
-        if (existingTeam2.getStatus().getId() != 1) {
-            throw new NewExceptionType("Equipo: " + existingTeam2.getName() + " es el perdedor", HttpStatus.BAD_REQUEST);
+        if (existingTeam2.getStatus().getId() != 1 && existingTeam2.getStatus().getId() != 5 ) {
+            throw new NewExceptionType("Equipo: " + existingTeam2.getName() + " no puede participar mas", HttpStatus.BAD_REQUEST);
         }
         if (existingField.getStatus().getId() != 1) {
             throw new NewExceptionType("Campo: " + existingField.getName() + " no esta disponible", HttpStatus.BAD_REQUEST);
