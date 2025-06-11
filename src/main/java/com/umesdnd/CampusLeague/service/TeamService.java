@@ -86,6 +86,22 @@ public class TeamService implements TeamServiceInterface {
         return teamDTO;
     }
 
+
+    @Override
+    @Transactional
+    public Team discardTeam(Long id) {
+        Team team = teamRepository.findById(id).orElseThrow(() -> new NewExceptionType("Equipo no encontrado con id " + id, HttpStatus.NOT_FOUND));
+        if (team.getStatus() != null) {
+            if (team.getStatus().getId() == 5L) {
+                throw new NewExceptionType("El equipo ya se ha aceptado", HttpStatus.BAD_REQUEST);
+            }
+        }
+        team.setApproved_date(LocalDateTime.now());
+        team.setStatus(statusService.getById(2L));
+        System.out.println(team.getApproved_date());
+        return teamRepository.save(team);
+    }
+
     @Override
     @Transactional
     public Team activeTeam(Long id) {

@@ -34,6 +34,8 @@ public class SecurityConfig {
             "/inscripcion/**",
             "/mi-equipo/**",
             "/equipo/jugadores/**",
+            "/ganador",
+            "/partido"
     };
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {

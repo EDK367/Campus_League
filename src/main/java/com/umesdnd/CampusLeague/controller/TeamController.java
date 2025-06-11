@@ -45,6 +45,12 @@ public class TeamController {
         return new ResponseEntity<>(team, HttpStatus.OK);
     }
 
+    @PutMapping("/descartado/{id}")
+    public ResponseEntity<Team> discardTeam(@PathVariable Long id) {
+        Team team = teamService.discardTeam(id);
+        return new ResponseEntity<>(team, HttpStatus.OK);
+    }
+
     @GetMapping
     public ResponseEntity<List<Team>> getAllTeams() {
         List<Team> teams = teamService.getAll();

@@ -10,6 +10,7 @@ import java.util.List;
 
 public interface TeamServiceInterface extends CrudServiceInterface<Team> {
     TeamDTO getWithPlayers(Long id);
+    Team discardTeam(Long id);
     Team activeTeam(Long id);
     List<TeamPlayer> playersTeamsId(Long id);
     List<PlayersDTO> playersTeamsIdDTO(Long id);
