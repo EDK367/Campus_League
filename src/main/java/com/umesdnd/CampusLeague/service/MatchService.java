@@ -10,8 +10,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.time.DayOfWeek;
+import java.util.*;
 
 @Service
 public class MatchService implements MatchServiceInterface {
@@ -41,6 +45,101 @@ public class MatchService implements MatchServiceInterface {
     public Match getById(Long id) {
         return matchRepository.findById(id).orElseThrow(() -> new NewExceptionType("Partido no encontrado", HttpStatus.NOT_FOUND));
     }
+
+    @Override
+    @Transactional
+    public List<Match> generateMatches(Long idTournament) {
+        Tournament tournament = tournamentService.getById(idTournament);
+        List<Team> teams = teamRepository.findByTournamentId(idTournament);
+        List<Field> fields = fieldService.getAll();
+        List<Referee> referees = refereeService.getAll();
+
+        if (teams.size() < 2) {
+            throw new NewExceptionType("No hay suficientes equipos para generar partidos", HttpStatus.BAD_REQUEST);
+        }
+
+        List<Match> generatedMatches = new ArrayList<>();
+        Set<String> scheduledPairs = new HashSet<>();
+        LocalDate startDate = LocalDate.now().plusDays(1);
+
+        int dailyMatches = 0;
+        int weeklyMatches = 0;
+        int fieldIndex = 0;
+        int refereeIndex = 0;
+
+        int[] matchHours = {15, 17};
+
+        for (int i = 0; i < teams.size(); i++) {
+            for (int j = i + 1; j < teams.size(); j++) {
+                Team team1 = teams.get(i);
+                Team team2 = teams.get(j);
+
+                String key = team1.getId() + "-" + team2.getId();
+                if (scheduledPairs.contains(key)) continue;
+                scheduledPairs.add(key);
+
+                boolean scheduled = false;
+                while (!scheduled) {
+                    // Evitar fines de semana
+                    while (startDate.getDayOfWeek() == DayOfWeek.SATURDAY || startDate.getDayOfWeek() == DayOfWeek.SUNDAY) {
+                        startDate = startDate.plusDays(1);
+                        dailyMatches = 0;
+                    }
+
+                    if (weeklyMatches >= 4) {
+                        startDate = startDate.with(DayOfWeek.MONDAY).plusWeeks(1);
+                        weeklyMatches = 0;
+                        dailyMatches = 0;
+                    }
+
+                    if (dailyMatches >= matchHours.length) {
+                        startDate = startDate.plusDays(1);
+                        dailyMatches = 0;
+                        continue;
+                    }
+
+                    Field field = fields.get(fieldIndex % fields.size());
+                    Referee referee = referees.get(refereeIndex % referees.size());
+
+                    LocalDateTime matchDateTime = startDate.atTime(matchHours[dailyMatches], 0);
+
+                    boolean fieldOccupied = matchRepository.existsByFieldIdAndMatchDate(field.getId(), matchDateTime);
+                    if (!fieldOccupied) {
+                        Match match = new Match();
+                        match.setTournament(tournament);
+                        match.setTeam1(team1);
+                        match.setTeam2(team2);
+                        match.setTeam1_score(0L);
+                        match.setTeam2_score(0L);
+                        match.setStatus(statusService.getById(1L));
+                        match.setField(field);
+                        match.setReferee(referee);
+                        match.setMatchDate(matchDateTime);
+
+                        matchRepository.save(match);
+                        generatedMatches.add(match);
+
+                        dailyMatches++;
+                        weeklyMatches++;
+                        fieldIndex++;
+                        refereeIndex++;
+                        scheduled = true;
+                    } else {
+                        // Si campo ocupado, probar siguiente campo
+                        fieldIndex++;
+                        // Si ya intentaste con todos los campos para esa hora, pasar a siguiente hora
+                        if (fieldIndex % fields.size() == 0) {
+                            dailyMatches++;
+                        }
+                    }
+                }
+            }
+        }
+
+
+        return generatedMatches;
+    }
+
 
     @Transactional
     public Match saveOne(Match match) {

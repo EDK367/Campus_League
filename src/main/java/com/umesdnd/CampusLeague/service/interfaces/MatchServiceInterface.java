@@ -7,5 +7,6 @@ import java.util.List;
 
 
 public interface MatchServiceInterface extends CrudServiceInterface<Match> {
-    public List<Match> generateMatch(Match match);
+    List<Match> generateMatches(Long idTournament);
+    List<Match> generateMatch(Match match);
 }

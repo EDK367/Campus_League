@@ -1,5 +1,6 @@
 package com.umesdnd.CampusLeague.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -33,7 +34,8 @@ public class Match {
     private Team team2;
 
     @Column(name = "match_date", columnDefinition = "DATETIME(6) DEFAULT CURRENT_TIMESTAMP(6)", nullable = true)
-    private LocalDateTime match_date;
+    @JsonProperty("match_date")
+    private LocalDateTime matchDate;
 
     @Column(name = "team1_score", columnDefinition = "INT DEFAULT 0", nullable = true)
     private Long team1_score;

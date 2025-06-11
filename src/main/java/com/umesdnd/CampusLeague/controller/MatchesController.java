@@ -31,6 +31,13 @@ public class MatchesController {
         return new ResponseEntity<>(saveMatch, HttpStatus.CREATED);
     }
 
+    @PostMapping("/generador/{id}")
+    public ResponseEntity<List<Match>> saveMatches(@PathVariable Long id) {
+        System.out.println(id + " aca este esto");
+        List<Match> saveMatches = matchService.generateMatches(id);
+        return new ResponseEntity<>(saveMatches, HttpStatus.CREATED);
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<Match> updateMatch(@PathVariable Long id, @RequestBody Match match) {
         Match updatedMatch = matchService.update(id, match);
